@@ -327,7 +327,8 @@ namespace StoneReverieGames.Terrain
                 {
                     _lod_materials_dic.Add(LOD_Materials[m].Original_Material, LOD_Materials[m]);
                 }
-
+                
+		RenderPipelineManager.beginContextRendering -= beginContextRendering;
                 RenderPipelineManager.beginContextRendering += beginContextRendering;
 
                 init = true;
@@ -339,6 +340,8 @@ namespace StoneReverieGames.Terrain
                     _terrain.OnChunkCreated -= OnChunkCreated;
                     _terrain.OnChunkDropped -= OnChunkDropped;
                     _terrain.OnChunkEnabled -= OnChunkEnabled;
+                    
+                    RenderPipelineManager.beginContextRendering -= beginContextRendering;
                 }
 
                 Dispose();
