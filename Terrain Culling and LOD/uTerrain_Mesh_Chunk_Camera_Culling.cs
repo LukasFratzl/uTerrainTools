@@ -15,7 +15,7 @@ namespace StoneReverieGames.Terrain
         public UltimateTerrain _terrain;
         public bool _autoFindCamera = true;
         public Camera _effectedCamera;
-        public bool _ignoreDemondRendering = false;
+        //public bool _ignoreDemondRendering = false;
         public int _renderingLayerMask = 0;
         public Material _shadowOnlyMaterial;
         //public bool _useFadeMaterial = false;
@@ -131,19 +131,19 @@ namespace StoneReverieGames.Terrain
 
         protected void Update()
         {
-            if (_terrain != null && !init)
-                Register(true, false);
-
-
-            if (init && _autoFindCamera && _effectedCamera == null)
+            if (_terrain != null && _autoFindCamera && _effectedCamera == null)
             {
                 _effectedCamera = Camera.main;
                 if (_effectedCamera == null) _effectedCamera = FindObjectOfType<Camera>();
             }
 
+            if (_terrain != null && !init)
+                Register(true, false);
+
+
             if (init && _effectedCamera != null)
             {
-                _isRenderFrame = _ignoreDemondRendering == false ? OnDemandRendering.willCurrentFrameRender : true;
+                _isRenderFrame = OnDemandRendering.willCurrentFrameRender;// _ignoreDemondRendering == false ? OnDemandRendering.willCurrentFrameRender/*  Time.frameCount % OnDemandRendering.renderFrameInterval == 0 */ : true;
 
                 if (_needUpdateVisibleData || _meshes_list_runtime.Count != _meshes_list.Count && _meshes_list_runtime.Count != 0)
                 {
@@ -179,11 +179,11 @@ namespace StoneReverieGames.Terrain
             }
         }
 
-        protected void LateUpdate()
+        protected void RenderPass2()
         {
             if (init && _effectedCamera != null)
             {
-                if (_meshes_list_runtime.Count > 0 && _isRenderFrame)
+                if (_meshes_list_runtime.Count > 0/*  && _isRenderFrame */)
                 {
                     bool isCreated = _visibleJob._isVisibleOutput.IsCreated;
 
@@ -328,6 +328,8 @@ namespace StoneReverieGames.Terrain
                     _lod_materials_dic.Add(LOD_Materials[m].Original_Material, LOD_Materials[m]);
                 }
 
+                RenderPipelineManager.beginContextRendering += beginContextRendering;
+
                 init = true;
             }
             else if (!_isRegister && _terrain != null && init)
@@ -347,6 +349,11 @@ namespace StoneReverieGames.Terrain
                 if (!_isReset)
                     init = false;
             }
+        }
+
+        private void beginContextRendering(ScriptableRenderContext arg1, List<Camera> arg2)
+        {
+            RenderPass2();
         }
 
         protected void ClearMeshes()
