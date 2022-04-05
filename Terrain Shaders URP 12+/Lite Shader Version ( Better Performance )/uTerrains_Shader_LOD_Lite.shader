@@ -264,7 +264,7 @@ Shader "uTerrains_Shader_LOD_Lite"
 				float4 texcoord : TEXCOORD0;
 				float4 texcoord1 : TEXCOORD1;
 				float4 texcoord2 : TEXCOORD2;
-				float4 ase_color : COLOR;
+				half4 ase_color : COLOR;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -292,31 +292,31 @@ Shader "uTerrains_Shader_LOD_Lite"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float _Tiling1;
-			float _OcclusionStrength4;
-			float _OcclusionStrength3;
-			float _OcclusionStrength2;
-			float _OcclusionStrength1;
-			float _Smooth6;
-			float _Smooth5;
-			float _Smooth4;
-			float _Smooth3;
-			float _Smooth2;
-			float _Smooth1;
-			float _OcclusionStrength5;
-			float _Shiny6;
-			float _Shiny4;
-			float _Shiny3;
-			float _Shiny2;
-			float _Shiny1;
-			float _Tiling6;
-			float _Tiling5;
-			float _Tiling4;
-			float _Tiling3;
-			float _Tiling2;
-			float _Falloff;
-			float _Shiny5;
-			float _OcclusionStrength6;
+			half _Tiling1;
+			half _OcclusionStrength4;
+			half _OcclusionStrength3;
+			half _OcclusionStrength2;
+			half _OcclusionStrength1;
+			half _Smooth6;
+			half _Smooth5;
+			half _Smooth4;
+			half _Smooth3;
+			half _Smooth2;
+			half _Smooth1;
+			half _OcclusionStrength5;
+			half _Shiny6;
+			half _Shiny4;
+			half _Shiny3;
+			half _Shiny2;
+			half _Shiny1;
+			half _Tiling6;
+			half _Tiling5;
+			half _Tiling4;
+			half _Tiling3;
+			half _Tiling2;
+			half _Falloff;
+			half _Shiny5;
+			half _OcclusionStrength6;
 			#ifdef _TRANSMISSION_ASE
 				float _TransmissionShadow;
 			#endif
@@ -352,8 +352,9 @@ Shader "uTerrains_Shader_LOD_Lite"
 			TEXTURE2D(_Occlusion6);
 
 
-			inline float4 TriplanarSampling193_g1( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling193_g12( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -362,13 +363,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling193_g2( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling193_g11( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -377,13 +379,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
 			inline float4 TriplanarSampling193_g7( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -392,13 +395,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling193_g4( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling193_g10( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -407,13 +411,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling193_g5( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling193_g9( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -422,13 +427,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling193_g6( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling193_g8( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -437,13 +443,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling202_g1( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling202_g12( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -452,13 +459,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling202_g2( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling202_g11( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -467,13 +475,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
 			inline float4 TriplanarSampling202_g7( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -482,13 +491,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling202_g4( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling202_g10( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -497,13 +507,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling202_g5( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling202_g9( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -512,13 +523,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling202_g6( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling202_g8( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -527,9 +539,9 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
 
@@ -616,7 +628,7 @@ Shader "uTerrains_Shader_LOD_Lite"
 				float4 texcoord : TEXCOORD0;
 				float4 texcoord1 : TEXCOORD1;
 				float4 texcoord2 : TEXCOORD2;
-				float4 ase_color : COLOR;
+				half4 ase_color : COLOR;
 
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
@@ -743,76 +755,76 @@ Shader "uTerrains_Shader_LOD_Lite"
 	
 				WorldViewDirection = SafeNormalize( WorldViewDirection );
 
-				float temp_output_55_0_g1 = IN.ase_color.r;
-				float temp_output_2_0_g1 = _Tiling1;
-				float2 temp_cast_0 = (temp_output_2_0_g1).xx;
-				float temp_output_184_0_g1 = _Falloff;
-				float3 temp_output_183_0_g1 = WorldPosition;
-				float4 triplanar193_g1 = TriplanarSampling193_g1( _Albedo1, sampler_point_repeat, temp_output_183_0_g1, WorldNormal, temp_output_184_0_g1, temp_cast_0, 1.0, 0, temp_output_55_0_g1 );
-				float3 appendResult185_g1 = (float3(triplanar193_g1.x , triplanar193_g1.g , triplanar193_g1.b));
-				float temp_output_55_0_g2 = IN.ase_color.g;
-				float temp_output_2_0_g2 = _Tiling2;
-				float2 temp_cast_1 = (temp_output_2_0_g2).xx;
-				float temp_output_184_0_g2 = _Falloff;
-				float3 temp_output_183_0_g2 = WorldPosition;
-				float4 triplanar193_g2 = TriplanarSampling193_g2( _Albedo2, sampler_point_repeat, temp_output_183_0_g2, WorldNormal, temp_output_184_0_g2, temp_cast_1, 1.0, 0, temp_output_55_0_g2 );
-				float3 appendResult185_g2 = (float3(triplanar193_g2.x , triplanar193_g2.g , triplanar193_g2.b));
-				float temp_output_55_0_g7 = IN.ase_color.b;
-				float temp_output_2_0_g7 = _Tiling3;
-				float2 temp_cast_2 = (temp_output_2_0_g7).xx;
-				float temp_output_184_0_g7 = _Falloff;
-				float3 temp_output_183_0_g7 = WorldPosition;
+				half temp_output_55_0_g12 = IN.ase_color.r;
+				half temp_output_2_0_g12 = _Tiling1;
+				half2 temp_cast_0 = (temp_output_2_0_g12).xx;
+				half temp_output_184_0_g12 = _Falloff;
+				half3 temp_output_183_0_g12 = WorldPosition;
+				float4 triplanar193_g12 = TriplanarSampling193_g12( _Albedo1, sampler_point_repeat, temp_output_183_0_g12, WorldNormal, temp_output_184_0_g12, temp_cast_0, 1.0, 0, temp_output_55_0_g12 );
+				half3 appendResult185_g12 = (half3(triplanar193_g12.x , triplanar193_g12.g , triplanar193_g12.b));
+				half temp_output_55_0_g11 = IN.ase_color.g;
+				half temp_output_2_0_g11 = _Tiling2;
+				half2 temp_cast_1 = (temp_output_2_0_g11).xx;
+				half temp_output_184_0_g11 = _Falloff;
+				half3 temp_output_183_0_g11 = WorldPosition;
+				float4 triplanar193_g11 = TriplanarSampling193_g11( _Albedo2, sampler_point_repeat, temp_output_183_0_g11, WorldNormal, temp_output_184_0_g11, temp_cast_1, 1.0, 0, temp_output_55_0_g11 );
+				half3 appendResult185_g11 = (half3(triplanar193_g11.x , triplanar193_g11.g , triplanar193_g11.b));
+				half temp_output_55_0_g7 = IN.ase_color.b;
+				half temp_output_2_0_g7 = _Tiling3;
+				half2 temp_cast_2 = (temp_output_2_0_g7).xx;
+				half temp_output_184_0_g7 = _Falloff;
+				half3 temp_output_183_0_g7 = WorldPosition;
 				float4 triplanar193_g7 = TriplanarSampling193_g7( _Albedo3, sampler_point_repeat, temp_output_183_0_g7, WorldNormal, temp_output_184_0_g7, temp_cast_2, 1.0, 0, temp_output_55_0_g7 );
-				float3 appendResult185_g7 = (float3(triplanar193_g7.x , triplanar193_g7.g , triplanar193_g7.b));
-				float temp_output_55_0_g4 = IN.ase_color.a;
-				float temp_output_2_0_g4 = _Tiling4;
-				float2 temp_cast_3 = (temp_output_2_0_g4).xx;
-				float temp_output_184_0_g4 = _Falloff;
-				float3 temp_output_183_0_g4 = WorldPosition;
-				float4 triplanar193_g4 = TriplanarSampling193_g4( _Albedo4, sampler_point_repeat, temp_output_183_0_g4, WorldNormal, temp_output_184_0_g4, temp_cast_3, 1.0, 0, temp_output_55_0_g4 );
-				float3 appendResult185_g4 = (float3(triplanar193_g4.x , triplanar193_g4.g , triplanar193_g4.b));
-				float temp_output_55_0_g5 = IN.ase_texcoord8.xy.x;
-				float temp_output_2_0_g5 = _Tiling5;
-				float2 temp_cast_4 = (temp_output_2_0_g5).xx;
-				float temp_output_184_0_g5 = _Falloff;
-				float3 temp_output_183_0_g5 = WorldPosition;
-				float4 triplanar193_g5 = TriplanarSampling193_g5( _Albedo5, sampler_point_repeat, temp_output_183_0_g5, WorldNormal, temp_output_184_0_g5, temp_cast_4, 1.0, 0, temp_output_55_0_g5 );
-				float3 appendResult185_g5 = (float3(triplanar193_g5.x , triplanar193_g5.g , triplanar193_g5.b));
-				float temp_output_55_0_g6 = IN.ase_texcoord8.xy.y;
-				float temp_output_2_0_g6 = _Tiling6;
-				float2 temp_cast_5 = (temp_output_2_0_g6).xx;
-				float temp_output_184_0_g6 = _Falloff;
-				float3 temp_output_183_0_g6 = WorldPosition;
-				float4 triplanar193_g6 = TriplanarSampling193_g6( _Albedo6, sampler_point_repeat, temp_output_183_0_g6, WorldNormal, temp_output_184_0_g6, temp_cast_5, 1.0, 0, temp_output_55_0_g6 );
-				float3 appendResult185_g6 = (float3(triplanar193_g6.x , triplanar193_g6.g , triplanar193_g6.b));
+				half3 appendResult185_g7 = (half3(triplanar193_g7.x , triplanar193_g7.g , triplanar193_g7.b));
+				half temp_output_55_0_g10 = IN.ase_color.a;
+				half temp_output_2_0_g10 = _Tiling4;
+				half2 temp_cast_3 = (temp_output_2_0_g10).xx;
+				half temp_output_184_0_g10 = _Falloff;
+				half3 temp_output_183_0_g10 = WorldPosition;
+				float4 triplanar193_g10 = TriplanarSampling193_g10( _Albedo4, sampler_point_repeat, temp_output_183_0_g10, WorldNormal, temp_output_184_0_g10, temp_cast_3, 1.0, 0, temp_output_55_0_g10 );
+				half3 appendResult185_g10 = (half3(triplanar193_g10.x , triplanar193_g10.g , triplanar193_g10.b));
+				half temp_output_55_0_g9 = IN.ase_texcoord8.xy.x;
+				half temp_output_2_0_g9 = _Tiling5;
+				half2 temp_cast_4 = (temp_output_2_0_g9).xx;
+				half temp_output_184_0_g9 = _Falloff;
+				half3 temp_output_183_0_g9 = WorldPosition;
+				float4 triplanar193_g9 = TriplanarSampling193_g9( _Albedo5, sampler_point_repeat, temp_output_183_0_g9, WorldNormal, temp_output_184_0_g9, temp_cast_4, 1.0, 0, temp_output_55_0_g9 );
+				half3 appendResult185_g9 = (half3(triplanar193_g9.x , triplanar193_g9.g , triplanar193_g9.b));
+				half temp_output_55_0_g8 = IN.ase_texcoord8.xy.y;
+				half temp_output_2_0_g8 = _Tiling6;
+				half2 temp_cast_5 = (temp_output_2_0_g8).xx;
+				half temp_output_184_0_g8 = _Falloff;
+				half3 temp_output_183_0_g8 = WorldPosition;
+				float4 triplanar193_g8 = TriplanarSampling193_g8( _Albedo6, sampler_point_repeat, temp_output_183_0_g8, WorldNormal, temp_output_184_0_g8, temp_cast_5, 1.0, 0, temp_output_55_0_g8 );
+				half3 appendResult185_g8 = (half3(triplanar193_g8.x , triplanar193_g8.g , triplanar193_g8.b));
 				
-				float2 temp_cast_6 = (temp_output_2_0_g1).xx;
-				float4 triplanar202_g1 = TriplanarSampling202_g1( _Occlusion1, sampler_point_repeat, temp_output_183_0_g1, WorldNormal, temp_output_184_0_g1, temp_cast_6, 1.0, 0, temp_output_55_0_g1 );
-				float temp_output_100_0_g1 = ( triplanar202_g1.x * temp_output_55_0_g1 );
-				float2 temp_cast_7 = (temp_output_2_0_g2).xx;
-				float4 triplanar202_g2 = TriplanarSampling202_g2( _Occlusion2, sampler_point_repeat, temp_output_183_0_g2, WorldNormal, temp_output_184_0_g2, temp_cast_7, 1.0, 0, temp_output_55_0_g2 );
-				float temp_output_100_0_g2 = ( triplanar202_g2.x * temp_output_55_0_g2 );
-				float2 temp_cast_8 = (temp_output_2_0_g7).xx;
+				half2 temp_cast_6 = (temp_output_2_0_g12).xx;
+				float4 triplanar202_g12 = TriplanarSampling202_g12( _Occlusion1, sampler_point_repeat, temp_output_183_0_g12, WorldNormal, temp_output_184_0_g12, temp_cast_6, 1.0, 0, temp_output_55_0_g12 );
+				half temp_output_100_0_g12 = ( triplanar202_g12.x * temp_output_55_0_g12 );
+				half2 temp_cast_7 = (temp_output_2_0_g11).xx;
+				float4 triplanar202_g11 = TriplanarSampling202_g11( _Occlusion2, sampler_point_repeat, temp_output_183_0_g11, WorldNormal, temp_output_184_0_g11, temp_cast_7, 1.0, 0, temp_output_55_0_g11 );
+				half temp_output_100_0_g11 = ( triplanar202_g11.x * temp_output_55_0_g11 );
+				half2 temp_cast_8 = (temp_output_2_0_g7).xx;
 				float4 triplanar202_g7 = TriplanarSampling202_g7( _Occlusion3, sampler_point_repeat, temp_output_183_0_g7, WorldNormal, temp_output_184_0_g7, temp_cast_8, 1.0, 0, temp_output_55_0_g7 );
-				float temp_output_100_0_g7 = ( triplanar202_g7.x * temp_output_55_0_g7 );
-				float2 temp_cast_9 = (temp_output_2_0_g4).xx;
-				float4 triplanar202_g4 = TriplanarSampling202_g4( _Occlusion4, sampler_point_repeat, temp_output_183_0_g4, WorldNormal, temp_output_184_0_g4, temp_cast_9, 1.0, 0, temp_output_55_0_g4 );
-				float temp_output_100_0_g4 = ( triplanar202_g4.x * temp_output_55_0_g4 );
-				float2 temp_cast_10 = (temp_output_2_0_g5).xx;
-				float4 triplanar202_g5 = TriplanarSampling202_g5( _Occlusion5, sampler_point_repeat, temp_output_183_0_g5, WorldNormal, temp_output_184_0_g5, temp_cast_10, 1.0, 0, temp_output_55_0_g5 );
-				float temp_output_100_0_g5 = ( triplanar202_g5.x * temp_output_55_0_g5 );
-				float2 temp_cast_11 = (temp_output_2_0_g6).xx;
-				float4 triplanar202_g6 = TriplanarSampling202_g6( _Occlusion6, sampler_point_repeat, temp_output_183_0_g6, WorldNormal, temp_output_184_0_g6, temp_cast_11, 1.0, 0, temp_output_55_0_g6 );
-				float temp_output_100_0_g6 = ( triplanar202_g6.x * temp_output_55_0_g6 );
-				half3 temp_cast_12 = (( ( ( ( ( ( _Shiny1 * temp_output_100_0_g1 ) + ( _Shiny2 * temp_output_100_0_g2 ) ) + ( _Shiny3 * temp_output_100_0_g7 ) ) + ( _Shiny4 * temp_output_100_0_g4 ) ) + ( _Shiny5 * temp_output_100_0_g5 ) ) + ( _Shiny6 * temp_output_100_0_g6 ) )).xxx;
+				half temp_output_100_0_g7 = ( triplanar202_g7.x * temp_output_55_0_g7 );
+				half2 temp_cast_9 = (temp_output_2_0_g10).xx;
+				float4 triplanar202_g10 = TriplanarSampling202_g10( _Occlusion4, sampler_point_repeat, temp_output_183_0_g10, WorldNormal, temp_output_184_0_g10, temp_cast_9, 1.0, 0, temp_output_55_0_g10 );
+				half temp_output_100_0_g10 = ( triplanar202_g10.x * temp_output_55_0_g10 );
+				half2 temp_cast_10 = (temp_output_2_0_g9).xx;
+				float4 triplanar202_g9 = TriplanarSampling202_g9( _Occlusion5, sampler_point_repeat, temp_output_183_0_g9, WorldNormal, temp_output_184_0_g9, temp_cast_10, 1.0, 0, temp_output_55_0_g9 );
+				half temp_output_100_0_g9 = ( triplanar202_g9.x * temp_output_55_0_g9 );
+				half2 temp_cast_11 = (temp_output_2_0_g8).xx;
+				float4 triplanar202_g8 = TriplanarSampling202_g8( _Occlusion6, sampler_point_repeat, temp_output_183_0_g8, WorldNormal, temp_output_184_0_g8, temp_cast_11, 1.0, 0, temp_output_55_0_g8 );
+				half temp_output_100_0_g8 = ( triplanar202_g8.x * temp_output_55_0_g8 );
+				half3 temp_cast_12 = (( ( ( ( ( ( _Shiny1 * temp_output_100_0_g12 ) + ( _Shiny2 * temp_output_100_0_g11 ) ) + ( _Shiny3 * temp_output_100_0_g7 ) ) + ( _Shiny4 * temp_output_100_0_g10 ) ) + ( _Shiny5 * temp_output_100_0_g9 ) ) + ( _Shiny6 * temp_output_100_0_g8 ) )).xxx;
 				
-				float3 Albedo = ( ( ( ( ( ( temp_output_55_0_g1 * appendResult185_g1 ) + ( temp_output_55_0_g2 * appendResult185_g2 ) ) + ( temp_output_55_0_g7 * appendResult185_g7 ) ) + ( temp_output_55_0_g4 * appendResult185_g4 ) ) + ( temp_output_55_0_g5 * appendResult185_g5 ) ) + ( temp_output_55_0_g6 * appendResult185_g6 ) );
+				float3 Albedo = ( ( ( ( ( ( temp_output_55_0_g12 * appendResult185_g12 ) + ( temp_output_55_0_g11 * appendResult185_g11 ) ) + ( temp_output_55_0_g7 * appendResult185_g7 ) ) + ( temp_output_55_0_g10 * appendResult185_g10 ) ) + ( temp_output_55_0_g9 * appendResult185_g9 ) ) + ( temp_output_55_0_g8 * appendResult185_g8 ) );
 				float3 Normal = float3(0, 0, 1);
 				float3 Emission = 0;
 				float3 Specular = temp_cast_12;
 				float Metallic = 0;
-				float Smoothness = ( ( ( ( ( ( _Smooth1 * temp_output_100_0_g1 ) + ( _Smooth2 * temp_output_100_0_g2 ) ) + ( _Smooth3 * temp_output_100_0_g7 ) ) + ( _Smooth4 * temp_output_100_0_g4 ) ) + ( _Smooth5 * temp_output_100_0_g5 ) ) + ( _Smooth6 * temp_output_100_0_g6 ) );
-				float Occlusion = ( ( ( ( ( ( _OcclusionStrength1 * temp_output_100_0_g1 ) + ( _OcclusionStrength2 * temp_output_100_0_g2 ) ) + ( _OcclusionStrength3 * temp_output_100_0_g7 ) ) + ( _OcclusionStrength4 * temp_output_100_0_g4 ) ) + ( _OcclusionStrength5 * temp_output_100_0_g5 ) ) + ( _OcclusionStrength6 * temp_output_100_0_g6 ) );
+				float Smoothness = ( ( ( ( ( ( _Smooth1 * temp_output_100_0_g12 ) + ( _Smooth2 * temp_output_100_0_g11 ) ) + ( _Smooth3 * temp_output_100_0_g7 ) ) + ( _Smooth4 * temp_output_100_0_g10 ) ) + ( _Smooth5 * temp_output_100_0_g9 ) ) + ( _Smooth6 * temp_output_100_0_g8 ) );
+				float Occlusion = ( ( ( ( ( ( _OcclusionStrength1 * temp_output_100_0_g12 ) + ( _OcclusionStrength2 * temp_output_100_0_g11 ) ) + ( _OcclusionStrength3 * temp_output_100_0_g7 ) ) + ( _OcclusionStrength4 * temp_output_100_0_g10 ) ) + ( _OcclusionStrength5 * temp_output_100_0_g9 ) ) + ( _OcclusionStrength6 * temp_output_100_0_g8 ) );
 				float Alpha = 1;
 				float AlphaClipThreshold = 0.5;
 				float AlphaClipThresholdShadow = 0.5;
@@ -1074,31 +1086,31 @@ Shader "uTerrains_Shader_LOD_Lite"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float _Tiling1;
-			float _OcclusionStrength4;
-			float _OcclusionStrength3;
-			float _OcclusionStrength2;
-			float _OcclusionStrength1;
-			float _Smooth6;
-			float _Smooth5;
-			float _Smooth4;
-			float _Smooth3;
-			float _Smooth2;
-			float _Smooth1;
-			float _OcclusionStrength5;
-			float _Shiny6;
-			float _Shiny4;
-			float _Shiny3;
-			float _Shiny2;
-			float _Shiny1;
-			float _Tiling6;
-			float _Tiling5;
-			float _Tiling4;
-			float _Tiling3;
-			float _Tiling2;
-			float _Falloff;
-			float _Shiny5;
-			float _OcclusionStrength6;
+			half _Tiling1;
+			half _OcclusionStrength4;
+			half _OcclusionStrength3;
+			half _OcclusionStrength2;
+			half _OcclusionStrength1;
+			half _Smooth6;
+			half _Smooth5;
+			half _Smooth4;
+			half _Smooth3;
+			half _Smooth2;
+			half _Smooth1;
+			half _OcclusionStrength5;
+			half _Shiny6;
+			half _Shiny4;
+			half _Shiny3;
+			half _Shiny2;
+			half _Shiny1;
+			half _Tiling6;
+			half _Tiling5;
+			half _Tiling4;
+			half _Tiling3;
+			half _Tiling2;
+			half _Falloff;
+			half _Shiny5;
+			half _OcclusionStrength6;
 			#ifdef _TRANSMISSION_ASE
 				float _TransmissionShadow;
 			#endif
@@ -1338,7 +1350,7 @@ Shader "uTerrains_Shader_LOD_Lite"
 				float4 texcoord0 : TEXCOORD0;
 				float4 texcoord1 : TEXCOORD1;
 				float4 texcoord2 : TEXCOORD2;
-				float4 ase_color : COLOR;
+				half4 ase_color : COLOR;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -1363,31 +1375,31 @@ Shader "uTerrains_Shader_LOD_Lite"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float _Tiling1;
-			float _OcclusionStrength4;
-			float _OcclusionStrength3;
-			float _OcclusionStrength2;
-			float _OcclusionStrength1;
-			float _Smooth6;
-			float _Smooth5;
-			float _Smooth4;
-			float _Smooth3;
-			float _Smooth2;
-			float _Smooth1;
-			float _OcclusionStrength5;
-			float _Shiny6;
-			float _Shiny4;
-			float _Shiny3;
-			float _Shiny2;
-			float _Shiny1;
-			float _Tiling6;
-			float _Tiling5;
-			float _Tiling4;
-			float _Tiling3;
-			float _Tiling2;
-			float _Falloff;
-			float _Shiny5;
-			float _OcclusionStrength6;
+			half _Tiling1;
+			half _OcclusionStrength4;
+			half _OcclusionStrength3;
+			half _OcclusionStrength2;
+			half _OcclusionStrength1;
+			half _Smooth6;
+			half _Smooth5;
+			half _Smooth4;
+			half _Smooth3;
+			half _Smooth2;
+			half _Smooth1;
+			half _OcclusionStrength5;
+			half _Shiny6;
+			half _Shiny4;
+			half _Shiny3;
+			half _Shiny2;
+			half _Shiny1;
+			half _Tiling6;
+			half _Tiling5;
+			half _Tiling4;
+			half _Tiling3;
+			half _Tiling2;
+			half _Falloff;
+			half _Shiny5;
+			half _OcclusionStrength6;
 			#ifdef _TRANSMISSION_ASE
 				float _TransmissionShadow;
 			#endif
@@ -1417,8 +1429,9 @@ Shader "uTerrains_Shader_LOD_Lite"
 			TEXTURE2D(_Albedo6);
 
 
-			inline float4 TriplanarSampling193_g1( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling193_g12( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -1427,13 +1440,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling193_g2( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling193_g11( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -1442,13 +1456,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
 			inline float4 TriplanarSampling193_g7( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -1457,13 +1472,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling193_g4( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling193_g10( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -1472,13 +1488,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling193_g5( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling193_g9( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -1487,13 +1504,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling193_g6( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling193_g8( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -1502,9 +1520,9 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
 
@@ -1515,7 +1533,7 @@ Shader "uTerrains_Shader_LOD_Lite"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
-				float3 ase_worldNormal = TransformObjectToWorldNormal(v.ase_normal);
+				half3 ase_worldNormal = TransformObjectToWorldNormal(v.ase_normal);
 				o.ase_texcoord4.xyz = ase_worldNormal;
 				
 				o.ase_color = v.ase_color;
@@ -1571,7 +1589,7 @@ Shader "uTerrains_Shader_LOD_Lite"
 				float4 texcoord0 : TEXCOORD0;
 				float4 texcoord1 : TEXCOORD1;
 				float4 texcoord2 : TEXCOORD2;
-				float4 ase_color : COLOR;
+				half4 ase_color : COLOR;
 
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
@@ -1670,52 +1688,52 @@ Shader "uTerrains_Shader_LOD_Lite"
 					#endif
 				#endif
 
-				float temp_output_55_0_g1 = IN.ase_color.r;
-				float temp_output_2_0_g1 = _Tiling1;
-				float2 temp_cast_0 = (temp_output_2_0_g1).xx;
-				float temp_output_184_0_g1 = _Falloff;
-				float3 ase_worldNormal = IN.ase_texcoord4.xyz;
-				float3 temp_output_183_0_g1 = WorldPosition;
-				float4 triplanar193_g1 = TriplanarSampling193_g1( _Albedo1, sampler_point_repeat, temp_output_183_0_g1, ase_worldNormal, temp_output_184_0_g1, temp_cast_0, 1.0, 0, temp_output_55_0_g1 );
-				float3 appendResult185_g1 = (float3(triplanar193_g1.x , triplanar193_g1.g , triplanar193_g1.b));
-				float temp_output_55_0_g2 = IN.ase_color.g;
-				float temp_output_2_0_g2 = _Tiling2;
-				float2 temp_cast_1 = (temp_output_2_0_g2).xx;
-				float temp_output_184_0_g2 = _Falloff;
-				float3 temp_output_183_0_g2 = WorldPosition;
-				float4 triplanar193_g2 = TriplanarSampling193_g2( _Albedo2, sampler_point_repeat, temp_output_183_0_g2, ase_worldNormal, temp_output_184_0_g2, temp_cast_1, 1.0, 0, temp_output_55_0_g2 );
-				float3 appendResult185_g2 = (float3(triplanar193_g2.x , triplanar193_g2.g , triplanar193_g2.b));
-				float temp_output_55_0_g7 = IN.ase_color.b;
-				float temp_output_2_0_g7 = _Tiling3;
-				float2 temp_cast_2 = (temp_output_2_0_g7).xx;
-				float temp_output_184_0_g7 = _Falloff;
-				float3 temp_output_183_0_g7 = WorldPosition;
+				half temp_output_55_0_g12 = IN.ase_color.r;
+				half temp_output_2_0_g12 = _Tiling1;
+				half2 temp_cast_0 = (temp_output_2_0_g12).xx;
+				half temp_output_184_0_g12 = _Falloff;
+				half3 ase_worldNormal = IN.ase_texcoord4.xyz;
+				half3 temp_output_183_0_g12 = WorldPosition;
+				float4 triplanar193_g12 = TriplanarSampling193_g12( _Albedo1, sampler_point_repeat, temp_output_183_0_g12, ase_worldNormal, temp_output_184_0_g12, temp_cast_0, 1.0, 0, temp_output_55_0_g12 );
+				half3 appendResult185_g12 = (half3(triplanar193_g12.x , triplanar193_g12.g , triplanar193_g12.b));
+				half temp_output_55_0_g11 = IN.ase_color.g;
+				half temp_output_2_0_g11 = _Tiling2;
+				half2 temp_cast_1 = (temp_output_2_0_g11).xx;
+				half temp_output_184_0_g11 = _Falloff;
+				half3 temp_output_183_0_g11 = WorldPosition;
+				float4 triplanar193_g11 = TriplanarSampling193_g11( _Albedo2, sampler_point_repeat, temp_output_183_0_g11, ase_worldNormal, temp_output_184_0_g11, temp_cast_1, 1.0, 0, temp_output_55_0_g11 );
+				half3 appendResult185_g11 = (half3(triplanar193_g11.x , triplanar193_g11.g , triplanar193_g11.b));
+				half temp_output_55_0_g7 = IN.ase_color.b;
+				half temp_output_2_0_g7 = _Tiling3;
+				half2 temp_cast_2 = (temp_output_2_0_g7).xx;
+				half temp_output_184_0_g7 = _Falloff;
+				half3 temp_output_183_0_g7 = WorldPosition;
 				float4 triplanar193_g7 = TriplanarSampling193_g7( _Albedo3, sampler_point_repeat, temp_output_183_0_g7, ase_worldNormal, temp_output_184_0_g7, temp_cast_2, 1.0, 0, temp_output_55_0_g7 );
-				float3 appendResult185_g7 = (float3(triplanar193_g7.x , triplanar193_g7.g , triplanar193_g7.b));
-				float temp_output_55_0_g4 = IN.ase_color.a;
-				float temp_output_2_0_g4 = _Tiling4;
-				float2 temp_cast_3 = (temp_output_2_0_g4).xx;
-				float temp_output_184_0_g4 = _Falloff;
-				float3 temp_output_183_0_g4 = WorldPosition;
-				float4 triplanar193_g4 = TriplanarSampling193_g4( _Albedo4, sampler_point_repeat, temp_output_183_0_g4, ase_worldNormal, temp_output_184_0_g4, temp_cast_3, 1.0, 0, temp_output_55_0_g4 );
-				float3 appendResult185_g4 = (float3(triplanar193_g4.x , triplanar193_g4.g , triplanar193_g4.b));
-				float temp_output_55_0_g5 = IN.ase_texcoord5.xy.x;
-				float temp_output_2_0_g5 = _Tiling5;
-				float2 temp_cast_4 = (temp_output_2_0_g5).xx;
-				float temp_output_184_0_g5 = _Falloff;
-				float3 temp_output_183_0_g5 = WorldPosition;
-				float4 triplanar193_g5 = TriplanarSampling193_g5( _Albedo5, sampler_point_repeat, temp_output_183_0_g5, ase_worldNormal, temp_output_184_0_g5, temp_cast_4, 1.0, 0, temp_output_55_0_g5 );
-				float3 appendResult185_g5 = (float3(triplanar193_g5.x , triplanar193_g5.g , triplanar193_g5.b));
-				float temp_output_55_0_g6 = IN.ase_texcoord5.xy.y;
-				float temp_output_2_0_g6 = _Tiling6;
-				float2 temp_cast_5 = (temp_output_2_0_g6).xx;
-				float temp_output_184_0_g6 = _Falloff;
-				float3 temp_output_183_0_g6 = WorldPosition;
-				float4 triplanar193_g6 = TriplanarSampling193_g6( _Albedo6, sampler_point_repeat, temp_output_183_0_g6, ase_worldNormal, temp_output_184_0_g6, temp_cast_5, 1.0, 0, temp_output_55_0_g6 );
-				float3 appendResult185_g6 = (float3(triplanar193_g6.x , triplanar193_g6.g , triplanar193_g6.b));
+				half3 appendResult185_g7 = (half3(triplanar193_g7.x , triplanar193_g7.g , triplanar193_g7.b));
+				half temp_output_55_0_g10 = IN.ase_color.a;
+				half temp_output_2_0_g10 = _Tiling4;
+				half2 temp_cast_3 = (temp_output_2_0_g10).xx;
+				half temp_output_184_0_g10 = _Falloff;
+				half3 temp_output_183_0_g10 = WorldPosition;
+				float4 triplanar193_g10 = TriplanarSampling193_g10( _Albedo4, sampler_point_repeat, temp_output_183_0_g10, ase_worldNormal, temp_output_184_0_g10, temp_cast_3, 1.0, 0, temp_output_55_0_g10 );
+				half3 appendResult185_g10 = (half3(triplanar193_g10.x , triplanar193_g10.g , triplanar193_g10.b));
+				half temp_output_55_0_g9 = IN.ase_texcoord5.xy.x;
+				half temp_output_2_0_g9 = _Tiling5;
+				half2 temp_cast_4 = (temp_output_2_0_g9).xx;
+				half temp_output_184_0_g9 = _Falloff;
+				half3 temp_output_183_0_g9 = WorldPosition;
+				float4 triplanar193_g9 = TriplanarSampling193_g9( _Albedo5, sampler_point_repeat, temp_output_183_0_g9, ase_worldNormal, temp_output_184_0_g9, temp_cast_4, 1.0, 0, temp_output_55_0_g9 );
+				half3 appendResult185_g9 = (half3(triplanar193_g9.x , triplanar193_g9.g , triplanar193_g9.b));
+				half temp_output_55_0_g8 = IN.ase_texcoord5.xy.y;
+				half temp_output_2_0_g8 = _Tiling6;
+				half2 temp_cast_5 = (temp_output_2_0_g8).xx;
+				half temp_output_184_0_g8 = _Falloff;
+				half3 temp_output_183_0_g8 = WorldPosition;
+				float4 triplanar193_g8 = TriplanarSampling193_g8( _Albedo6, sampler_point_repeat, temp_output_183_0_g8, ase_worldNormal, temp_output_184_0_g8, temp_cast_5, 1.0, 0, temp_output_55_0_g8 );
+				half3 appendResult185_g8 = (half3(triplanar193_g8.x , triplanar193_g8.g , triplanar193_g8.b));
 				
 				
-				float3 Albedo = ( ( ( ( ( ( temp_output_55_0_g1 * appendResult185_g1 ) + ( temp_output_55_0_g2 * appendResult185_g2 ) ) + ( temp_output_55_0_g7 * appendResult185_g7 ) ) + ( temp_output_55_0_g4 * appendResult185_g4 ) ) + ( temp_output_55_0_g5 * appendResult185_g5 ) ) + ( temp_output_55_0_g6 * appendResult185_g6 ) );
+				float3 Albedo = ( ( ( ( ( ( temp_output_55_0_g12 * appendResult185_g12 ) + ( temp_output_55_0_g11 * appendResult185_g11 ) ) + ( temp_output_55_0_g7 * appendResult185_g7 ) ) + ( temp_output_55_0_g10 * appendResult185_g10 ) ) + ( temp_output_55_0_g9 * appendResult185_g9 ) ) + ( temp_output_55_0_g8 * appendResult185_g8 ) );
 				float3 Emission = 0;
 				float Alpha = 1;
 				float AlphaClipThreshold = 0.5;
@@ -1781,7 +1799,7 @@ Shader "uTerrains_Shader_LOD_Lite"
 			{
 				float4 vertex : POSITION;
 				float3 ase_normal : NORMAL;
-				float4 ase_color : COLOR;
+				half4 ase_color : COLOR;
 				float4 ase_texcoord1 : TEXCOORD1;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
@@ -1803,31 +1821,31 @@ Shader "uTerrains_Shader_LOD_Lite"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float _Tiling1;
-			float _OcclusionStrength4;
-			float _OcclusionStrength3;
-			float _OcclusionStrength2;
-			float _OcclusionStrength1;
-			float _Smooth6;
-			float _Smooth5;
-			float _Smooth4;
-			float _Smooth3;
-			float _Smooth2;
-			float _Smooth1;
-			float _OcclusionStrength5;
-			float _Shiny6;
-			float _Shiny4;
-			float _Shiny3;
-			float _Shiny2;
-			float _Shiny1;
-			float _Tiling6;
-			float _Tiling5;
-			float _Tiling4;
-			float _Tiling3;
-			float _Tiling2;
-			float _Falloff;
-			float _Shiny5;
-			float _OcclusionStrength6;
+			half _Tiling1;
+			half _OcclusionStrength4;
+			half _OcclusionStrength3;
+			half _OcclusionStrength2;
+			half _OcclusionStrength1;
+			half _Smooth6;
+			half _Smooth5;
+			half _Smooth4;
+			half _Smooth3;
+			half _Smooth2;
+			half _Smooth1;
+			half _OcclusionStrength5;
+			half _Shiny6;
+			half _Shiny4;
+			half _Shiny3;
+			half _Shiny2;
+			half _Shiny1;
+			half _Tiling6;
+			half _Tiling5;
+			half _Tiling4;
+			half _Tiling3;
+			half _Tiling2;
+			half _Falloff;
+			half _Shiny5;
+			half _OcclusionStrength6;
 			#ifdef _TRANSMISSION_ASE
 				float _TransmissionShadow;
 			#endif
@@ -1857,8 +1875,9 @@ Shader "uTerrains_Shader_LOD_Lite"
 			TEXTURE2D(_Albedo6);
 
 
-			inline float4 TriplanarSampling193_g1( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling193_g12( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -1867,13 +1886,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling193_g2( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling193_g11( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -1882,13 +1902,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
 			inline float4 TriplanarSampling193_g7( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -1897,13 +1918,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling193_g4( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling193_g10( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -1912,13 +1934,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling193_g5( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling193_g9( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -1927,13 +1950,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling193_g6( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling193_g8( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -1942,9 +1966,9 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
 
@@ -1955,7 +1979,7 @@ Shader "uTerrains_Shader_LOD_Lite"
 				UNITY_TRANSFER_INSTANCE_ID( v, o );
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO( o );
 
-				float3 ase_worldNormal = TransformObjectToWorldNormal(v.ase_normal);
+				half3 ase_worldNormal = TransformObjectToWorldNormal(v.ase_normal);
 				o.ase_texcoord2.xyz = ase_worldNormal;
 				
 				o.ase_color = v.ase_color;
@@ -2002,7 +2026,7 @@ Shader "uTerrains_Shader_LOD_Lite"
 			{
 				float4 vertex : INTERNALTESSPOS;
 				float3 ase_normal : NORMAL;
-				float4 ase_color : COLOR;
+				half4 ase_color : COLOR;
 				float4 ase_texcoord1 : TEXCOORD1;
 
 				UNITY_VERTEX_INPUT_INSTANCE_ID
@@ -2098,52 +2122,52 @@ Shader "uTerrains_Shader_LOD_Lite"
 					#endif
 				#endif
 
-				float temp_output_55_0_g1 = IN.ase_color.r;
-				float temp_output_2_0_g1 = _Tiling1;
-				float2 temp_cast_0 = (temp_output_2_0_g1).xx;
-				float temp_output_184_0_g1 = _Falloff;
-				float3 ase_worldNormal = IN.ase_texcoord2.xyz;
-				float3 temp_output_183_0_g1 = WorldPosition;
-				float4 triplanar193_g1 = TriplanarSampling193_g1( _Albedo1, sampler_point_repeat, temp_output_183_0_g1, ase_worldNormal, temp_output_184_0_g1, temp_cast_0, 1.0, 0, temp_output_55_0_g1 );
-				float3 appendResult185_g1 = (float3(triplanar193_g1.x , triplanar193_g1.g , triplanar193_g1.b));
-				float temp_output_55_0_g2 = IN.ase_color.g;
-				float temp_output_2_0_g2 = _Tiling2;
-				float2 temp_cast_1 = (temp_output_2_0_g2).xx;
-				float temp_output_184_0_g2 = _Falloff;
-				float3 temp_output_183_0_g2 = WorldPosition;
-				float4 triplanar193_g2 = TriplanarSampling193_g2( _Albedo2, sampler_point_repeat, temp_output_183_0_g2, ase_worldNormal, temp_output_184_0_g2, temp_cast_1, 1.0, 0, temp_output_55_0_g2 );
-				float3 appendResult185_g2 = (float3(triplanar193_g2.x , triplanar193_g2.g , triplanar193_g2.b));
-				float temp_output_55_0_g7 = IN.ase_color.b;
-				float temp_output_2_0_g7 = _Tiling3;
-				float2 temp_cast_2 = (temp_output_2_0_g7).xx;
-				float temp_output_184_0_g7 = _Falloff;
-				float3 temp_output_183_0_g7 = WorldPosition;
+				half temp_output_55_0_g12 = IN.ase_color.r;
+				half temp_output_2_0_g12 = _Tiling1;
+				half2 temp_cast_0 = (temp_output_2_0_g12).xx;
+				half temp_output_184_0_g12 = _Falloff;
+				half3 ase_worldNormal = IN.ase_texcoord2.xyz;
+				half3 temp_output_183_0_g12 = WorldPosition;
+				float4 triplanar193_g12 = TriplanarSampling193_g12( _Albedo1, sampler_point_repeat, temp_output_183_0_g12, ase_worldNormal, temp_output_184_0_g12, temp_cast_0, 1.0, 0, temp_output_55_0_g12 );
+				half3 appendResult185_g12 = (half3(triplanar193_g12.x , triplanar193_g12.g , triplanar193_g12.b));
+				half temp_output_55_0_g11 = IN.ase_color.g;
+				half temp_output_2_0_g11 = _Tiling2;
+				half2 temp_cast_1 = (temp_output_2_0_g11).xx;
+				half temp_output_184_0_g11 = _Falloff;
+				half3 temp_output_183_0_g11 = WorldPosition;
+				float4 triplanar193_g11 = TriplanarSampling193_g11( _Albedo2, sampler_point_repeat, temp_output_183_0_g11, ase_worldNormal, temp_output_184_0_g11, temp_cast_1, 1.0, 0, temp_output_55_0_g11 );
+				half3 appendResult185_g11 = (half3(triplanar193_g11.x , triplanar193_g11.g , triplanar193_g11.b));
+				half temp_output_55_0_g7 = IN.ase_color.b;
+				half temp_output_2_0_g7 = _Tiling3;
+				half2 temp_cast_2 = (temp_output_2_0_g7).xx;
+				half temp_output_184_0_g7 = _Falloff;
+				half3 temp_output_183_0_g7 = WorldPosition;
 				float4 triplanar193_g7 = TriplanarSampling193_g7( _Albedo3, sampler_point_repeat, temp_output_183_0_g7, ase_worldNormal, temp_output_184_0_g7, temp_cast_2, 1.0, 0, temp_output_55_0_g7 );
-				float3 appendResult185_g7 = (float3(triplanar193_g7.x , triplanar193_g7.g , triplanar193_g7.b));
-				float temp_output_55_0_g4 = IN.ase_color.a;
-				float temp_output_2_0_g4 = _Tiling4;
-				float2 temp_cast_3 = (temp_output_2_0_g4).xx;
-				float temp_output_184_0_g4 = _Falloff;
-				float3 temp_output_183_0_g4 = WorldPosition;
-				float4 triplanar193_g4 = TriplanarSampling193_g4( _Albedo4, sampler_point_repeat, temp_output_183_0_g4, ase_worldNormal, temp_output_184_0_g4, temp_cast_3, 1.0, 0, temp_output_55_0_g4 );
-				float3 appendResult185_g4 = (float3(triplanar193_g4.x , triplanar193_g4.g , triplanar193_g4.b));
-				float temp_output_55_0_g5 = IN.ase_texcoord3.xy.x;
-				float temp_output_2_0_g5 = _Tiling5;
-				float2 temp_cast_4 = (temp_output_2_0_g5).xx;
-				float temp_output_184_0_g5 = _Falloff;
-				float3 temp_output_183_0_g5 = WorldPosition;
-				float4 triplanar193_g5 = TriplanarSampling193_g5( _Albedo5, sampler_point_repeat, temp_output_183_0_g5, ase_worldNormal, temp_output_184_0_g5, temp_cast_4, 1.0, 0, temp_output_55_0_g5 );
-				float3 appendResult185_g5 = (float3(triplanar193_g5.x , triplanar193_g5.g , triplanar193_g5.b));
-				float temp_output_55_0_g6 = IN.ase_texcoord3.xy.y;
-				float temp_output_2_0_g6 = _Tiling6;
-				float2 temp_cast_5 = (temp_output_2_0_g6).xx;
-				float temp_output_184_0_g6 = _Falloff;
-				float3 temp_output_183_0_g6 = WorldPosition;
-				float4 triplanar193_g6 = TriplanarSampling193_g6( _Albedo6, sampler_point_repeat, temp_output_183_0_g6, ase_worldNormal, temp_output_184_0_g6, temp_cast_5, 1.0, 0, temp_output_55_0_g6 );
-				float3 appendResult185_g6 = (float3(triplanar193_g6.x , triplanar193_g6.g , triplanar193_g6.b));
+				half3 appendResult185_g7 = (half3(triplanar193_g7.x , triplanar193_g7.g , triplanar193_g7.b));
+				half temp_output_55_0_g10 = IN.ase_color.a;
+				half temp_output_2_0_g10 = _Tiling4;
+				half2 temp_cast_3 = (temp_output_2_0_g10).xx;
+				half temp_output_184_0_g10 = _Falloff;
+				half3 temp_output_183_0_g10 = WorldPosition;
+				float4 triplanar193_g10 = TriplanarSampling193_g10( _Albedo4, sampler_point_repeat, temp_output_183_0_g10, ase_worldNormal, temp_output_184_0_g10, temp_cast_3, 1.0, 0, temp_output_55_0_g10 );
+				half3 appendResult185_g10 = (half3(triplanar193_g10.x , triplanar193_g10.g , triplanar193_g10.b));
+				half temp_output_55_0_g9 = IN.ase_texcoord3.xy.x;
+				half temp_output_2_0_g9 = _Tiling5;
+				half2 temp_cast_4 = (temp_output_2_0_g9).xx;
+				half temp_output_184_0_g9 = _Falloff;
+				half3 temp_output_183_0_g9 = WorldPosition;
+				float4 triplanar193_g9 = TriplanarSampling193_g9( _Albedo5, sampler_point_repeat, temp_output_183_0_g9, ase_worldNormal, temp_output_184_0_g9, temp_cast_4, 1.0, 0, temp_output_55_0_g9 );
+				half3 appendResult185_g9 = (half3(triplanar193_g9.x , triplanar193_g9.g , triplanar193_g9.b));
+				half temp_output_55_0_g8 = IN.ase_texcoord3.xy.y;
+				half temp_output_2_0_g8 = _Tiling6;
+				half2 temp_cast_5 = (temp_output_2_0_g8).xx;
+				half temp_output_184_0_g8 = _Falloff;
+				half3 temp_output_183_0_g8 = WorldPosition;
+				float4 triplanar193_g8 = TriplanarSampling193_g8( _Albedo6, sampler_point_repeat, temp_output_183_0_g8, ase_worldNormal, temp_output_184_0_g8, temp_cast_5, 1.0, 0, temp_output_55_0_g8 );
+				half3 appendResult185_g8 = (half3(triplanar193_g8.x , triplanar193_g8.g , triplanar193_g8.b));
 				
 				
-				float3 Albedo = ( ( ( ( ( ( temp_output_55_0_g1 * appendResult185_g1 ) + ( temp_output_55_0_g2 * appendResult185_g2 ) ) + ( temp_output_55_0_g7 * appendResult185_g7 ) ) + ( temp_output_55_0_g4 * appendResult185_g4 ) ) + ( temp_output_55_0_g5 * appendResult185_g5 ) ) + ( temp_output_55_0_g6 * appendResult185_g6 ) );
+				float3 Albedo = ( ( ( ( ( ( temp_output_55_0_g12 * appendResult185_g12 ) + ( temp_output_55_0_g11 * appendResult185_g11 ) ) + ( temp_output_55_0_g7 * appendResult185_g7 ) ) + ( temp_output_55_0_g10 * appendResult185_g10 ) ) + ( temp_output_55_0_g9 * appendResult185_g9 ) ) + ( temp_output_55_0_g8 * appendResult185_g8 ) );
 				float Alpha = 1;
 				float AlphaClipThreshold = 0.5;
 
@@ -2220,31 +2244,31 @@ Shader "uTerrains_Shader_LOD_Lite"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float _Tiling1;
-			float _OcclusionStrength4;
-			float _OcclusionStrength3;
-			float _OcclusionStrength2;
-			float _OcclusionStrength1;
-			float _Smooth6;
-			float _Smooth5;
-			float _Smooth4;
-			float _Smooth3;
-			float _Smooth2;
-			float _Smooth1;
-			float _OcclusionStrength5;
-			float _Shiny6;
-			float _Shiny4;
-			float _Shiny3;
-			float _Shiny2;
-			float _Shiny1;
-			float _Tiling6;
-			float _Tiling5;
-			float _Tiling4;
-			float _Tiling3;
-			float _Tiling2;
-			float _Falloff;
-			float _Shiny5;
-			float _OcclusionStrength6;
+			half _Tiling1;
+			half _OcclusionStrength4;
+			half _OcclusionStrength3;
+			half _OcclusionStrength2;
+			half _OcclusionStrength1;
+			half _Smooth6;
+			half _Smooth5;
+			half _Smooth4;
+			half _Smooth3;
+			half _Smooth2;
+			half _Smooth1;
+			half _OcclusionStrength5;
+			half _Shiny6;
+			half _Shiny4;
+			half _Shiny3;
+			half _Shiny2;
+			half _Shiny1;
+			half _Tiling6;
+			half _Tiling5;
+			half _Tiling4;
+			half _Tiling3;
+			half _Tiling2;
+			half _Falloff;
+			half _Shiny5;
+			half _OcclusionStrength6;
 			#ifdef _TRANSMISSION_ASE
 				float _TransmissionShadow;
 			#endif
@@ -2539,7 +2563,7 @@ Shader "uTerrains_Shader_LOD_Lite"
 				float4 texcoord : TEXCOORD0;
 				float4 texcoord1 : TEXCOORD1;
 				float4 texcoord2 : TEXCOORD2;
-				float4 ase_color : COLOR;
+				half4 ase_color : COLOR;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -2567,31 +2591,31 @@ Shader "uTerrains_Shader_LOD_Lite"
 			};
 
 			CBUFFER_START(UnityPerMaterial)
-			float _Tiling1;
-			float _OcclusionStrength4;
-			float _OcclusionStrength3;
-			float _OcclusionStrength2;
-			float _OcclusionStrength1;
-			float _Smooth6;
-			float _Smooth5;
-			float _Smooth4;
-			float _Smooth3;
-			float _Smooth2;
-			float _Smooth1;
-			float _OcclusionStrength5;
-			float _Shiny6;
-			float _Shiny4;
-			float _Shiny3;
-			float _Shiny2;
-			float _Shiny1;
-			float _Tiling6;
-			float _Tiling5;
-			float _Tiling4;
-			float _Tiling3;
-			float _Tiling2;
-			float _Falloff;
-			float _Shiny5;
-			float _OcclusionStrength6;
+			half _Tiling1;
+			half _OcclusionStrength4;
+			half _OcclusionStrength3;
+			half _OcclusionStrength2;
+			half _OcclusionStrength1;
+			half _Smooth6;
+			half _Smooth5;
+			half _Smooth4;
+			half _Smooth3;
+			half _Smooth2;
+			half _Smooth1;
+			half _OcclusionStrength5;
+			half _Shiny6;
+			half _Shiny4;
+			half _Shiny3;
+			half _Shiny2;
+			half _Shiny1;
+			half _Tiling6;
+			half _Tiling5;
+			half _Tiling4;
+			half _Tiling3;
+			half _Tiling2;
+			half _Falloff;
+			half _Shiny5;
+			half _OcclusionStrength6;
 			#ifdef _TRANSMISSION_ASE
 				float _TransmissionShadow;
 			#endif
@@ -2627,8 +2651,9 @@ Shader "uTerrains_Shader_LOD_Lite"
 			TEXTURE2D(_Occlusion6);
 
 
-			inline float4 TriplanarSampling193_g1( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling193_g12( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -2637,13 +2662,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling193_g2( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling193_g11( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -2652,13 +2678,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
 			inline float4 TriplanarSampling193_g7( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -2667,13 +2694,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling193_g4( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling193_g10( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -2682,13 +2710,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling193_g5( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling193_g9( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -2697,13 +2726,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling193_g6( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling193_g8( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -2712,13 +2742,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling202_g1( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling202_g12( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -2727,13 +2758,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling202_g2( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling202_g11( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -2742,13 +2774,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
 			inline float4 TriplanarSampling202_g7( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -2757,13 +2790,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling202_g4( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling202_g10( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -2772,13 +2806,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling202_g5( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling202_g9( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -2787,13 +2822,14 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
-			inline float4 TriplanarSampling202_g6( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
+			inline float4 TriplanarSampling202_g8( TEXTURE2D(topTexMap), SAMPLER(samplertopTexMap), float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )
 			{
+				float4 outputVar = float4(0,0,0,0);
 				if ( weight > 0.0 ) {
 				float3 projNormal = ( pow( abs( worldNormal ), falloff ) );
 				projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;
@@ -2802,9 +2838,9 @@ Shader "uTerrains_Shader_LOD_Lite"
 				xNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.zy * float2(  nsign.x, 1.0 ) );
 				yNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xz * float2(  nsign.y, 1.0 ) );
 				zNorm = SAMPLE_TEXTURE2D( topTexMap, samplertopTexMap, tiling * worldPos.xy * float2( -nsign.z, 1.0 ) );
-				return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
+				outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;
 				}
-				return float4(0,0,0,0);
+				return outputVar;
 			}
 			
 
@@ -2886,7 +2922,7 @@ Shader "uTerrains_Shader_LOD_Lite"
 				float4 texcoord : TEXCOORD0;
 				float4 texcoord1 : TEXCOORD1;
 				float4 texcoord2 : TEXCOORD2;
-				float4 ase_color : COLOR;
+				half4 ase_color : COLOR;
 
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
@@ -3016,76 +3052,76 @@ Shader "uTerrains_Shader_LOD_Lite"
 	
 				WorldViewDirection = SafeNormalize( WorldViewDirection );
 
-				float temp_output_55_0_g1 = IN.ase_color.r;
-				float temp_output_2_0_g1 = _Tiling1;
-				float2 temp_cast_0 = (temp_output_2_0_g1).xx;
-				float temp_output_184_0_g1 = _Falloff;
-				float3 temp_output_183_0_g1 = WorldPosition;
-				float4 triplanar193_g1 = TriplanarSampling193_g1( _Albedo1, sampler_point_repeat, temp_output_183_0_g1, WorldNormal, temp_output_184_0_g1, temp_cast_0, 1.0, 0, temp_output_55_0_g1 );
-				float3 appendResult185_g1 = (float3(triplanar193_g1.x , triplanar193_g1.g , triplanar193_g1.b));
-				float temp_output_55_0_g2 = IN.ase_color.g;
-				float temp_output_2_0_g2 = _Tiling2;
-				float2 temp_cast_1 = (temp_output_2_0_g2).xx;
-				float temp_output_184_0_g2 = _Falloff;
-				float3 temp_output_183_0_g2 = WorldPosition;
-				float4 triplanar193_g2 = TriplanarSampling193_g2( _Albedo2, sampler_point_repeat, temp_output_183_0_g2, WorldNormal, temp_output_184_0_g2, temp_cast_1, 1.0, 0, temp_output_55_0_g2 );
-				float3 appendResult185_g2 = (float3(triplanar193_g2.x , triplanar193_g2.g , triplanar193_g2.b));
-				float temp_output_55_0_g7 = IN.ase_color.b;
-				float temp_output_2_0_g7 = _Tiling3;
-				float2 temp_cast_2 = (temp_output_2_0_g7).xx;
-				float temp_output_184_0_g7 = _Falloff;
-				float3 temp_output_183_0_g7 = WorldPosition;
+				half temp_output_55_0_g12 = IN.ase_color.r;
+				half temp_output_2_0_g12 = _Tiling1;
+				half2 temp_cast_0 = (temp_output_2_0_g12).xx;
+				half temp_output_184_0_g12 = _Falloff;
+				half3 temp_output_183_0_g12 = WorldPosition;
+				float4 triplanar193_g12 = TriplanarSampling193_g12( _Albedo1, sampler_point_repeat, temp_output_183_0_g12, WorldNormal, temp_output_184_0_g12, temp_cast_0, 1.0, 0, temp_output_55_0_g12 );
+				half3 appendResult185_g12 = (half3(triplanar193_g12.x , triplanar193_g12.g , triplanar193_g12.b));
+				half temp_output_55_0_g11 = IN.ase_color.g;
+				half temp_output_2_0_g11 = _Tiling2;
+				half2 temp_cast_1 = (temp_output_2_0_g11).xx;
+				half temp_output_184_0_g11 = _Falloff;
+				half3 temp_output_183_0_g11 = WorldPosition;
+				float4 triplanar193_g11 = TriplanarSampling193_g11( _Albedo2, sampler_point_repeat, temp_output_183_0_g11, WorldNormal, temp_output_184_0_g11, temp_cast_1, 1.0, 0, temp_output_55_0_g11 );
+				half3 appendResult185_g11 = (half3(triplanar193_g11.x , triplanar193_g11.g , triplanar193_g11.b));
+				half temp_output_55_0_g7 = IN.ase_color.b;
+				half temp_output_2_0_g7 = _Tiling3;
+				half2 temp_cast_2 = (temp_output_2_0_g7).xx;
+				half temp_output_184_0_g7 = _Falloff;
+				half3 temp_output_183_0_g7 = WorldPosition;
 				float4 triplanar193_g7 = TriplanarSampling193_g7( _Albedo3, sampler_point_repeat, temp_output_183_0_g7, WorldNormal, temp_output_184_0_g7, temp_cast_2, 1.0, 0, temp_output_55_0_g7 );
-				float3 appendResult185_g7 = (float3(triplanar193_g7.x , triplanar193_g7.g , triplanar193_g7.b));
-				float temp_output_55_0_g4 = IN.ase_color.a;
-				float temp_output_2_0_g4 = _Tiling4;
-				float2 temp_cast_3 = (temp_output_2_0_g4).xx;
-				float temp_output_184_0_g4 = _Falloff;
-				float3 temp_output_183_0_g4 = WorldPosition;
-				float4 triplanar193_g4 = TriplanarSampling193_g4( _Albedo4, sampler_point_repeat, temp_output_183_0_g4, WorldNormal, temp_output_184_0_g4, temp_cast_3, 1.0, 0, temp_output_55_0_g4 );
-				float3 appendResult185_g4 = (float3(triplanar193_g4.x , triplanar193_g4.g , triplanar193_g4.b));
-				float temp_output_55_0_g5 = IN.ase_texcoord8.xy.x;
-				float temp_output_2_0_g5 = _Tiling5;
-				float2 temp_cast_4 = (temp_output_2_0_g5).xx;
-				float temp_output_184_0_g5 = _Falloff;
-				float3 temp_output_183_0_g5 = WorldPosition;
-				float4 triplanar193_g5 = TriplanarSampling193_g5( _Albedo5, sampler_point_repeat, temp_output_183_0_g5, WorldNormal, temp_output_184_0_g5, temp_cast_4, 1.0, 0, temp_output_55_0_g5 );
-				float3 appendResult185_g5 = (float3(triplanar193_g5.x , triplanar193_g5.g , triplanar193_g5.b));
-				float temp_output_55_0_g6 = IN.ase_texcoord8.xy.y;
-				float temp_output_2_0_g6 = _Tiling6;
-				float2 temp_cast_5 = (temp_output_2_0_g6).xx;
-				float temp_output_184_0_g6 = _Falloff;
-				float3 temp_output_183_0_g6 = WorldPosition;
-				float4 triplanar193_g6 = TriplanarSampling193_g6( _Albedo6, sampler_point_repeat, temp_output_183_0_g6, WorldNormal, temp_output_184_0_g6, temp_cast_5, 1.0, 0, temp_output_55_0_g6 );
-				float3 appendResult185_g6 = (float3(triplanar193_g6.x , triplanar193_g6.g , triplanar193_g6.b));
+				half3 appendResult185_g7 = (half3(triplanar193_g7.x , triplanar193_g7.g , triplanar193_g7.b));
+				half temp_output_55_0_g10 = IN.ase_color.a;
+				half temp_output_2_0_g10 = _Tiling4;
+				half2 temp_cast_3 = (temp_output_2_0_g10).xx;
+				half temp_output_184_0_g10 = _Falloff;
+				half3 temp_output_183_0_g10 = WorldPosition;
+				float4 triplanar193_g10 = TriplanarSampling193_g10( _Albedo4, sampler_point_repeat, temp_output_183_0_g10, WorldNormal, temp_output_184_0_g10, temp_cast_3, 1.0, 0, temp_output_55_0_g10 );
+				half3 appendResult185_g10 = (half3(triplanar193_g10.x , triplanar193_g10.g , triplanar193_g10.b));
+				half temp_output_55_0_g9 = IN.ase_texcoord8.xy.x;
+				half temp_output_2_0_g9 = _Tiling5;
+				half2 temp_cast_4 = (temp_output_2_0_g9).xx;
+				half temp_output_184_0_g9 = _Falloff;
+				half3 temp_output_183_0_g9 = WorldPosition;
+				float4 triplanar193_g9 = TriplanarSampling193_g9( _Albedo5, sampler_point_repeat, temp_output_183_0_g9, WorldNormal, temp_output_184_0_g9, temp_cast_4, 1.0, 0, temp_output_55_0_g9 );
+				half3 appendResult185_g9 = (half3(triplanar193_g9.x , triplanar193_g9.g , triplanar193_g9.b));
+				half temp_output_55_0_g8 = IN.ase_texcoord8.xy.y;
+				half temp_output_2_0_g8 = _Tiling6;
+				half2 temp_cast_5 = (temp_output_2_0_g8).xx;
+				half temp_output_184_0_g8 = _Falloff;
+				half3 temp_output_183_0_g8 = WorldPosition;
+				float4 triplanar193_g8 = TriplanarSampling193_g8( _Albedo6, sampler_point_repeat, temp_output_183_0_g8, WorldNormal, temp_output_184_0_g8, temp_cast_5, 1.0, 0, temp_output_55_0_g8 );
+				half3 appendResult185_g8 = (half3(triplanar193_g8.x , triplanar193_g8.g , triplanar193_g8.b));
 				
-				float2 temp_cast_6 = (temp_output_2_0_g1).xx;
-				float4 triplanar202_g1 = TriplanarSampling202_g1( _Occlusion1, sampler_point_repeat, temp_output_183_0_g1, WorldNormal, temp_output_184_0_g1, temp_cast_6, 1.0, 0, temp_output_55_0_g1 );
-				float temp_output_100_0_g1 = ( triplanar202_g1.x * temp_output_55_0_g1 );
-				float2 temp_cast_7 = (temp_output_2_0_g2).xx;
-				float4 triplanar202_g2 = TriplanarSampling202_g2( _Occlusion2, sampler_point_repeat, temp_output_183_0_g2, WorldNormal, temp_output_184_0_g2, temp_cast_7, 1.0, 0, temp_output_55_0_g2 );
-				float temp_output_100_0_g2 = ( triplanar202_g2.x * temp_output_55_0_g2 );
-				float2 temp_cast_8 = (temp_output_2_0_g7).xx;
+				half2 temp_cast_6 = (temp_output_2_0_g12).xx;
+				float4 triplanar202_g12 = TriplanarSampling202_g12( _Occlusion1, sampler_point_repeat, temp_output_183_0_g12, WorldNormal, temp_output_184_0_g12, temp_cast_6, 1.0, 0, temp_output_55_0_g12 );
+				half temp_output_100_0_g12 = ( triplanar202_g12.x * temp_output_55_0_g12 );
+				half2 temp_cast_7 = (temp_output_2_0_g11).xx;
+				float4 triplanar202_g11 = TriplanarSampling202_g11( _Occlusion2, sampler_point_repeat, temp_output_183_0_g11, WorldNormal, temp_output_184_0_g11, temp_cast_7, 1.0, 0, temp_output_55_0_g11 );
+				half temp_output_100_0_g11 = ( triplanar202_g11.x * temp_output_55_0_g11 );
+				half2 temp_cast_8 = (temp_output_2_0_g7).xx;
 				float4 triplanar202_g7 = TriplanarSampling202_g7( _Occlusion3, sampler_point_repeat, temp_output_183_0_g7, WorldNormal, temp_output_184_0_g7, temp_cast_8, 1.0, 0, temp_output_55_0_g7 );
-				float temp_output_100_0_g7 = ( triplanar202_g7.x * temp_output_55_0_g7 );
-				float2 temp_cast_9 = (temp_output_2_0_g4).xx;
-				float4 triplanar202_g4 = TriplanarSampling202_g4( _Occlusion4, sampler_point_repeat, temp_output_183_0_g4, WorldNormal, temp_output_184_0_g4, temp_cast_9, 1.0, 0, temp_output_55_0_g4 );
-				float temp_output_100_0_g4 = ( triplanar202_g4.x * temp_output_55_0_g4 );
-				float2 temp_cast_10 = (temp_output_2_0_g5).xx;
-				float4 triplanar202_g5 = TriplanarSampling202_g5( _Occlusion5, sampler_point_repeat, temp_output_183_0_g5, WorldNormal, temp_output_184_0_g5, temp_cast_10, 1.0, 0, temp_output_55_0_g5 );
-				float temp_output_100_0_g5 = ( triplanar202_g5.x * temp_output_55_0_g5 );
-				float2 temp_cast_11 = (temp_output_2_0_g6).xx;
-				float4 triplanar202_g6 = TriplanarSampling202_g6( _Occlusion6, sampler_point_repeat, temp_output_183_0_g6, WorldNormal, temp_output_184_0_g6, temp_cast_11, 1.0, 0, temp_output_55_0_g6 );
-				float temp_output_100_0_g6 = ( triplanar202_g6.x * temp_output_55_0_g6 );
-				half3 temp_cast_12 = (( ( ( ( ( ( _Shiny1 * temp_output_100_0_g1 ) + ( _Shiny2 * temp_output_100_0_g2 ) ) + ( _Shiny3 * temp_output_100_0_g7 ) ) + ( _Shiny4 * temp_output_100_0_g4 ) ) + ( _Shiny5 * temp_output_100_0_g5 ) ) + ( _Shiny6 * temp_output_100_0_g6 ) )).xxx;
+				half temp_output_100_0_g7 = ( triplanar202_g7.x * temp_output_55_0_g7 );
+				half2 temp_cast_9 = (temp_output_2_0_g10).xx;
+				float4 triplanar202_g10 = TriplanarSampling202_g10( _Occlusion4, sampler_point_repeat, temp_output_183_0_g10, WorldNormal, temp_output_184_0_g10, temp_cast_9, 1.0, 0, temp_output_55_0_g10 );
+				half temp_output_100_0_g10 = ( triplanar202_g10.x * temp_output_55_0_g10 );
+				half2 temp_cast_10 = (temp_output_2_0_g9).xx;
+				float4 triplanar202_g9 = TriplanarSampling202_g9( _Occlusion5, sampler_point_repeat, temp_output_183_0_g9, WorldNormal, temp_output_184_0_g9, temp_cast_10, 1.0, 0, temp_output_55_0_g9 );
+				half temp_output_100_0_g9 = ( triplanar202_g9.x * temp_output_55_0_g9 );
+				half2 temp_cast_11 = (temp_output_2_0_g8).xx;
+				float4 triplanar202_g8 = TriplanarSampling202_g8( _Occlusion6, sampler_point_repeat, temp_output_183_0_g8, WorldNormal, temp_output_184_0_g8, temp_cast_11, 1.0, 0, temp_output_55_0_g8 );
+				half temp_output_100_0_g8 = ( triplanar202_g8.x * temp_output_55_0_g8 );
+				half3 temp_cast_12 = (( ( ( ( ( ( _Shiny1 * temp_output_100_0_g12 ) + ( _Shiny2 * temp_output_100_0_g11 ) ) + ( _Shiny3 * temp_output_100_0_g7 ) ) + ( _Shiny4 * temp_output_100_0_g10 ) ) + ( _Shiny5 * temp_output_100_0_g9 ) ) + ( _Shiny6 * temp_output_100_0_g8 ) )).xxx;
 				
-				float3 Albedo = ( ( ( ( ( ( temp_output_55_0_g1 * appendResult185_g1 ) + ( temp_output_55_0_g2 * appendResult185_g2 ) ) + ( temp_output_55_0_g7 * appendResult185_g7 ) ) + ( temp_output_55_0_g4 * appendResult185_g4 ) ) + ( temp_output_55_0_g5 * appendResult185_g5 ) ) + ( temp_output_55_0_g6 * appendResult185_g6 ) );
+				float3 Albedo = ( ( ( ( ( ( temp_output_55_0_g12 * appendResult185_g12 ) + ( temp_output_55_0_g11 * appendResult185_g11 ) ) + ( temp_output_55_0_g7 * appendResult185_g7 ) ) + ( temp_output_55_0_g10 * appendResult185_g10 ) ) + ( temp_output_55_0_g9 * appendResult185_g9 ) ) + ( temp_output_55_0_g8 * appendResult185_g8 ) );
 				float3 Normal = float3(0, 0, 1);
 				float3 Emission = 0;
 				float3 Specular = temp_cast_12;
 				float Metallic = 0;
-				float Smoothness = ( ( ( ( ( ( _Smooth1 * temp_output_100_0_g1 ) + ( _Smooth2 * temp_output_100_0_g2 ) ) + ( _Smooth3 * temp_output_100_0_g7 ) ) + ( _Smooth4 * temp_output_100_0_g4 ) ) + ( _Smooth5 * temp_output_100_0_g5 ) ) + ( _Smooth6 * temp_output_100_0_g6 ) );
-				float Occlusion = ( ( ( ( ( ( _OcclusionStrength1 * temp_output_100_0_g1 ) + ( _OcclusionStrength2 * temp_output_100_0_g2 ) ) + ( _OcclusionStrength3 * temp_output_100_0_g7 ) ) + ( _OcclusionStrength4 * temp_output_100_0_g4 ) ) + ( _OcclusionStrength5 * temp_output_100_0_g5 ) ) + ( _OcclusionStrength6 * temp_output_100_0_g6 ) );
+				float Smoothness = ( ( ( ( ( ( _Smooth1 * temp_output_100_0_g12 ) + ( _Smooth2 * temp_output_100_0_g11 ) ) + ( _Smooth3 * temp_output_100_0_g7 ) ) + ( _Smooth4 * temp_output_100_0_g10 ) ) + ( _Smooth5 * temp_output_100_0_g9 ) ) + ( _Smooth6 * temp_output_100_0_g8 ) );
+				float Occlusion = ( ( ( ( ( ( _OcclusionStrength1 * temp_output_100_0_g12 ) + ( _OcclusionStrength2 * temp_output_100_0_g11 ) ) + ( _OcclusionStrength3 * temp_output_100_0_g7 ) ) + ( _OcclusionStrength4 * temp_output_100_0_g10 ) ) + ( _OcclusionStrength5 * temp_output_100_0_g9 ) ) + ( _OcclusionStrength6 * temp_output_100_0_g8 ) );
 				float Alpha = 1;
 				float AlphaClipThreshold = 0.5;
 				float AlphaClipThresholdShadow = 0.5;
@@ -3262,31 +3298,31 @@ Shader "uTerrains_Shader_LOD_Lite"
 			};
         
 			CBUFFER_START(UnityPerMaterial)
-			float _Tiling1;
-			float _OcclusionStrength4;
-			float _OcclusionStrength3;
-			float _OcclusionStrength2;
-			float _OcclusionStrength1;
-			float _Smooth6;
-			float _Smooth5;
-			float _Smooth4;
-			float _Smooth3;
-			float _Smooth2;
-			float _Smooth1;
-			float _OcclusionStrength5;
-			float _Shiny6;
-			float _Shiny4;
-			float _Shiny3;
-			float _Shiny2;
-			float _Shiny1;
-			float _Tiling6;
-			float _Tiling5;
-			float _Tiling4;
-			float _Tiling3;
-			float _Tiling2;
-			float _Falloff;
-			float _Shiny5;
-			float _OcclusionStrength6;
+			half _Tiling1;
+			half _OcclusionStrength4;
+			half _OcclusionStrength3;
+			half _OcclusionStrength2;
+			half _OcclusionStrength1;
+			half _Smooth6;
+			half _Smooth5;
+			half _Smooth4;
+			half _Smooth3;
+			half _Smooth2;
+			half _Smooth1;
+			half _OcclusionStrength5;
+			half _Shiny6;
+			half _Shiny4;
+			half _Shiny3;
+			half _Shiny2;
+			half _Shiny1;
+			half _Tiling6;
+			half _Tiling5;
+			half _Tiling4;
+			half _Tiling3;
+			half _Tiling2;
+			half _Falloff;
+			half _Shiny5;
+			half _OcclusionStrength6;
 			#ifdef TESSELLATION_ON
 				float _TessPhongStrength;
 				float _TessValue;
@@ -3496,31 +3532,31 @@ Shader "uTerrains_Shader_LOD_Lite"
 			};
         
 			CBUFFER_START(UnityPerMaterial)
-			float _Tiling1;
-			float _OcclusionStrength4;
-			float _OcclusionStrength3;
-			float _OcclusionStrength2;
-			float _OcclusionStrength1;
-			float _Smooth6;
-			float _Smooth5;
-			float _Smooth4;
-			float _Smooth3;
-			float _Smooth2;
-			float _Smooth1;
-			float _OcclusionStrength5;
-			float _Shiny6;
-			float _Shiny4;
-			float _Shiny3;
-			float _Shiny2;
-			float _Shiny1;
-			float _Tiling6;
-			float _Tiling5;
-			float _Tiling4;
-			float _Tiling3;
-			float _Tiling2;
-			float _Falloff;
-			float _Shiny5;
-			float _OcclusionStrength6;
+			half _Tiling1;
+			half _OcclusionStrength4;
+			half _OcclusionStrength3;
+			half _OcclusionStrength2;
+			half _OcclusionStrength1;
+			half _Smooth6;
+			half _Smooth5;
+			half _Smooth4;
+			half _Smooth3;
+			half _Smooth2;
+			half _Smooth1;
+			half _OcclusionStrength5;
+			half _Shiny6;
+			half _Shiny4;
+			half _Shiny3;
+			half _Shiny2;
+			half _Shiny1;
+			half _Tiling6;
+			half _Tiling5;
+			half _Tiling4;
+			half _Tiling3;
+			half _Tiling2;
+			half _Falloff;
+			half _Shiny5;
+			half _OcclusionStrength6;
 			#ifdef TESSELLATION_ON
 				float _TessPhongStrength;
 				float _TessValue;
@@ -3685,7 +3721,7 @@ Shader "uTerrains_Shader_LOD_Lite"
 }
 /*ASEBEGIN
 Version=18935
-223;78;1920;897;12211.96;3007.562;4.887227;True;False
+223;78;1920;898;12211.96;3010.006;4.887227;True;False
 Node;AmplifyShaderEditor.CommentaryNode;1403;-7913.417,-3198.841;Inherit;False;363.6243;672.551;;6;1025;1026;1027;1028;1029;1030;Shiny;1,1,1,1;0;0
 Node;AmplifyShaderEditor.CommentaryNode;1169;-10469.11,-807.0222;Inherit;False;461.7822;435.8462;;3;113;114;1655;Mesh Data;1,1,1,1;0;0
 Node;AmplifyShaderEditor.CommentaryNode;1414;-8773.885,-1677.113;Inherit;False;364.3984;691.3733;;6;1408;1409;1410;1411;1412;1413;Tiling;1,1,1,1;0;0
@@ -3694,92 +3730,120 @@ Node;AmplifyShaderEditor.CommentaryNode;1404;-7905.902,-2384.305;Inherit;False;3
 Node;AmplifyShaderEditor.CommentaryNode;1392;-8774.06,-3216.895;Inherit;False;315.998;1467.114;;6;46;42;44;43;45;47;Albedo Textures;1,1,1,1;0;0
 Node;AmplifyShaderEditor.CommentaryNode;1498;-10419.22,-1526.729;Inherit;False;257.5771;521.2003;;2;1493;1663;Samplers;1,1,1,1;0;0
 Node;AmplifyShaderEditor.CommentaryNode;1656;-7221.121,-3048.126;Inherit;False;312.3711;1458.015;;6;1662;1661;1660;1659;1658;1657;Occlusion Textures;1,1,1,1;0;0
-Node;AmplifyShaderEditor.RangedFloatNode;1080;-7844.138,-1109.273;Inherit;False;Property;_OcclusionStrength5;Occlusion Strength 5;26;0;Create;True;0;0;0;False;0;False;0.1;1;-10;10;0;1;FLOAT;0
-Node;AmplifyShaderEditor.TexturePropertyNode;42;-8714.773,-3166.896;Inherit;True;Property;_Albedo1;Albedo 1;0;3;[Header];[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 1;0;0;False;0;False;None;ace22d21483e490428f552c9a83ec097;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
-Node;AmplifyShaderEditor.RangedFloatNode;1048;-7844.459,-2019.973;Inherit;False;Property;_Smooth4;Smooth 4;23;0;Create;True;0;0;0;False;0;False;0.1;0.44;0;10;0;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;1506;-3617.274,224.8115;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.TexturePropertyNode;47;-8712.674,-1979.778;Inherit;True;Property;_Albedo6;Albedo 6;30;3;[Header];[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 6;0;0;False;0;False;None;97d17f5fbbbb20f43b0b696444e5484b;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
-Node;AmplifyShaderEditor.RangedFloatNode;1408;-8713.096,-1627.113;Inherit;False;Property;_Tiling1;Tiling 1;3;0;Create;True;0;0;0;False;0;False;0.1;0.163;0.01;2;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1079;-7845.649,-1211.269;Inherit;False;Property;_OcclusionStrength4;Occlusion Strength 4;20;0;Create;True;0;0;0;False;0;False;0.1;0.18;-10;10;0;1;FLOAT;0
-Node;AmplifyShaderEditor.TexturePropertyNode;45;-8709.84,-2437.863;Inherit;True;Property;_Albedo4;Albedo 4;18;3;[Header];[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 4;0;0;False;0;False;None;53fd6e83a5f2d1841959744abed92a6b;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
-Node;AmplifyShaderEditor.SimpleAddOpNode;1512;-3927.28,284.278;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1045;-7848.863,-2334.306;Inherit;False;Property;_Smooth1;Smooth 1;5;0;Create;True;0;0;0;False;0;False;0.1;0;0;10;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1049;-7840.81,-1924.873;Inherit;False;Property;_Smooth5;Smooth 5;29;0;Create;True;0;0;0;False;0;False;0.1;0.22;0;10;0;1;FLOAT;0
-Node;AmplifyShaderEditor.VertexColorNode;113;-10407.37,-757.0222;Inherit;False;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;1046;-7851.684,-2230.988;Inherit;False;Property;_Smooth2;Smooth 2;11;0;Create;True;0;0;0;False;0;False;0.1;1.01;0;10;0;1;FLOAT;0
+Node;AmplifyShaderEditor.TexturePropertyNode;43;-8713.832,-2930.658;Inherit;True;Property;_Albedo2;Albedo 2;6;3;[Header];[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 2;0;0;False;0;False;None;c0a45b109fd65b046936482efba94d21;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
+Node;AmplifyShaderEditor.RangedFloatNode;1413;-8716.694,-1101.737;Inherit;False;Property;_Tiling6;Tiling 6;33;0;Create;True;0;0;0;False;0;False;0.1;0.1;0.01;2;0;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;1425;-3293.843,171.1911;Inherit;False;2;2;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;1;FLOAT3;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;1514;-3935.234,409.5341;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1076;-7859.498,-1507.586;Inherit;False;Property;_OcclusionStrength1;Occlusion Strength 1;2;0;Create;True;0;0;0;False;0;False;0.1;2.36;-10;10;0;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;1518;-3300.04,538.4824;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1030;-7856.753,-2642.291;Inherit;False;Property;_Shiny6;Shiny 6;34;0;Create;True;0;0;0;False;0;False;0.1;0;0;10;0;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;1516;-3622.412,471.6206;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1412;-8723.891,-1211.491;Inherit;False;Property;_Tiling5;Tiling 5;27;0;Create;True;0;0;0;False;0;False;0.1;0.163;0.01;2;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1047;-7855.902,-2132.351;Inherit;False;Property;_Smooth3;Smooth 3;17;0;Create;True;0;0;0;False;0;False;0.1;0.82;0;10;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1077;-7857.441,-1413.036;Inherit;False;Property;_OcclusionStrength2;Occlusion Strength 2;8;0;Create;True;0;0;0;False;0;False;0.1;0.31;-10;10;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1410;-8723.886,-1425.598;Inherit;False;Property;_Tiling3;Tiling 3;15;0;Create;True;0;0;0;False;0;False;0.1;0.1;0.01;2;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1025;-7858.775,-3148.841;Inherit;False;Property;_Shiny1;Shiny 1;4;0;Create;True;0;0;0;False;0;False;0.1;0;0;10;0;1;FLOAT;0
+Node;AmplifyShaderEditor.TexCoordVertexDataNode;114;-10419.11,-530.1771;Inherit;False;1;2;0;5;FLOAT2;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.TexturePropertyNode;1662;-7161.211,-2037.587;Inherit;True;Property;_Occlusion5;Occlusion 5;25;2;[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 5;0;0;False;0;False;None;904abe3a0a0047448aaf87399172740a;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
+Node;AmplifyShaderEditor.SimpleAddOpNode;1510;-3292.086,413.2269;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.TexturePropertyNode;1657;-7170.558,-2275;Inherit;True;Property;_Occlusion4;Occlusion 4;19;2;[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 4;0;0;False;0;False;None;0db7eaa826100804c98ac7de7aa42dbe;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
+Node;AmplifyShaderEditor.SamplerStateNode;1493;-10360.86,-1476.73;Inherit;False;0;0;0;0;-1;None;1;0;SAMPLER2D;;False;1;SAMPLERSTATE;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;1504;-3454.894,253.4668;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;1515;-3775.24,435.8015;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;1517;-3460.032,500.2755;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;1505;-3294.902,291.6738;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.TexturePropertyNode;1659;-7160.75,-1820.117;Inherit;True;Property;_Occlusion6;Occlusion 6;31;2;[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 6;0;0;False;0;False;None;f073d69c92cf03d4b837236064595ff3;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
+Node;AmplifyShaderEditor.SimpleAddOpNode;1507;-3930.095,162.7249;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1028;-7856.949,-2850.91;Inherit;False;Property;_Shiny4;Shiny 4;22;0;Create;True;0;0;0;False;0;False;0.1;0.1;0;10;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1411;-8709.498,-1315.847;Inherit;False;Property;_Tiling4;Tiling 4;21;0;Create;True;0;0;0;False;0;False;0.1;0.1;0.01;2;0;1;FLOAT;0
+Node;AmplifyShaderEditor.TexturePropertyNode;1660;-7171.121,-2755.674;Inherit;True;Property;_Occlusion2;Occlusion 2;7;2;[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 2;0;0;False;0;False;None;aacaf9e80a8410a498b89b7012536647;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
+Node;AmplifyShaderEditor.TexturePropertyNode;1661;-7165.925,-2998.126;Inherit;True;Property;_Occlusion1;Occlusion 1;1;2;[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 1;0;0;False;0;False;None;9fd8b2202bbe9c94eb3313c3f871bc03;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
+Node;AmplifyShaderEditor.RangedFloatNode;1029;-7863.415,-2748.47;Inherit;False;Property;_Shiny5;Shiny 5;28;0;Create;True;0;0;0;False;0;False;0.1;0;0;10;0;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;1513;-3767.286,310.5454;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.TexturePropertyNode;1658;-7167.499,-2506.55;Inherit;True;Property;_Occlusion3;Occlusion 3;13;2;[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 3;0;0;False;0;False;None;c43e618f497cb96429438f86915af477;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
+Node;AmplifyShaderEditor.TexturePropertyNode;44;-8716.347,-2675.316;Inherit;True;Property;_Albedo3;Albedo 3;12;3;[Header];[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 3;0;0;False;0;False;None;d4193c885fab53849a003d859b9fd170;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
+Node;AmplifyShaderEditor.RangedFloatNode;1026;-7851.264,-3055.465;Inherit;False;Property;_Shiny2;Shiny 2;10;0;Create;True;0;0;0;False;0;False;0.1;0.1;0;10;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleAddOpNode;1509;-3452.078,375.0199;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.TexturePropertyNode;46;-8710.06,-2206.349;Inherit;True;Property;_Albedo5;Albedo 5;24;3;[Header];[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 5;0;0;False;0;False;None;c787bdaf6230f4b48a70eca7221420ad;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
-Node;AmplifyShaderEditor.RangedFloatNode;1078;-7846.423,-1307.39;Inherit;False;Property;_OcclusionStrength3;Occlusion Strength 3;14;0;Create;True;0;0;0;False;0;False;0.1;0.86;-10;10;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1409;-8709.494,-1528.154;Inherit;False;Property;_Tiling2;Tiling 2;9;0;Create;True;0;0;0;False;0;False;0.1;0.1;0.01;2;0;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;1511;-3614.458,346.3646;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.FunctionNode;1651;-4549.883,-60.28851;Inherit;False;Triplanar-Node-1-Section_Lite_LOD;-1;;7;818219960d7f48bfcbc50911bb0a801f;0;11;194;SAMPLERSTATE;0;False;201;SAMPLERSTATE;0;False;183;FLOAT3;0,0,0;False;184;FLOAT;0;False;1;SAMPLER2D;0;False;200;SAMPLER2D;0;False;2;FLOAT;0.1;False;82;FLOAT;0;False;81;FLOAT;0;False;83;FLOAT;0;False;55;FLOAT;0;False;4;FLOAT3;0;FLOAT;123;FLOAT;121;FLOAT;122
-Node;AmplifyShaderEditor.FunctionNode;1654;-4547.832,242.8889;Inherit;False;Triplanar-Node-1-Section_Lite_LOD;-1;;6;818219960d7f48bfcbc50911bb0a801f;0;11;194;SAMPLERSTATE;0;False;201;SAMPLERSTATE;0;False;183;FLOAT3;0,0,0;False;184;FLOAT;0;False;1;SAMPLER2D;0;False;200;SAMPLER2D;0;False;2;FLOAT;0.1;False;82;FLOAT;0;False;81;FLOAT;0;False;83;FLOAT;0;False;55;FLOAT;0;False;4;FLOAT3;0;FLOAT;123;FLOAT;121;FLOAT;122
-Node;AmplifyShaderEditor.FunctionNode;1653;-5002.399,245.6273;Inherit;False;Triplanar-Node-1-Section_Lite_LOD;-1;;5;818219960d7f48bfcbc50911bb0a801f;0;11;194;SAMPLERSTATE;0;False;201;SAMPLERSTATE;0;False;183;FLOAT3;0,0,0;False;184;FLOAT;0;False;1;SAMPLER2D;0;False;200;SAMPLER2D;0;False;2;FLOAT;0.1;False;82;FLOAT;0;False;81;FLOAT;0;False;83;FLOAT;0;False;55;FLOAT;0;False;4;FLOAT3;0;FLOAT;123;FLOAT;121;FLOAT;122
-Node;AmplifyShaderEditor.FunctionNode;1652;-5463.137,234.2811;Inherit;False;Triplanar-Node-1-Section_Lite_LOD;-1;;4;818219960d7f48bfcbc50911bb0a801f;0;11;194;SAMPLERSTATE;0;False;201;SAMPLERSTATE;0;False;183;FLOAT3;0,0,0;False;184;FLOAT;0;False;1;SAMPLER2D;0;False;200;SAMPLER2D;0;False;2;FLOAT;0.1;False;82;FLOAT;0;False;81;FLOAT;0;False;83;FLOAT;0;False;55;FLOAT;0;False;4;FLOAT3;0;FLOAT;123;FLOAT;121;FLOAT;122
-Node;AmplifyShaderEditor.FunctionNode;1650;-5004.451,-57.55017;Inherit;False;Triplanar-Node-1-Section_Lite_LOD;-1;;2;818219960d7f48bfcbc50911bb0a801f;0;11;194;SAMPLERSTATE;0;False;201;SAMPLERSTATE;0;False;183;FLOAT3;0,0,0;False;184;FLOAT;0;False;1;SAMPLER2D;0;False;200;SAMPLER2D;0;False;2;FLOAT;0.1;False;82;FLOAT;0;False;81;FLOAT;0;False;83;FLOAT;0;False;55;FLOAT;0;False;4;FLOAT3;0;FLOAT;123;FLOAT;121;FLOAT;122
-Node;AmplifyShaderEditor.FunctionNode;1649;-5465.188,-68.89624;Inherit;False;Triplanar-Node-1-Section_Lite_LOD;-1;;1;818219960d7f48bfcbc50911bb0a801f;0;11;194;SAMPLERSTATE;0;False;201;SAMPLERSTATE;0;False;183;FLOAT3;0,0,0;False;184;FLOAT;0;False;1;SAMPLER2D;0;False;200;SAMPLER2D;0;False;2;FLOAT;0.1;False;82;FLOAT;0;False;81;FLOAT;0;False;83;FLOAT;0;False;55;FLOAT;0;False;4;FLOAT3;0;FLOAT;123;FLOAT;121;FLOAT;122
-Node;AmplifyShaderEditor.RangedFloatNode;1027;-7849.791,-2951.467;Inherit;False;Property;_Shiny3;Shiny 3;16;0;Create;True;0;0;0;False;0;False;0.1;0.1;0;10;0;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;1424;-3453.834,132.9841;Inherit;False;2;2;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;1423;-3616.215,104.3289;Inherit;False;2;2;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;1422;-3769.042,68.50982;Inherit;False;2;2;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;1421;-3929.035,42.2425;Inherit;False;2;2;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.RangedFloatNode;592;-9893.582,-833.9846;Inherit;False;Property;_Falloff;Fall off;36;1;[Header];Create;True;1;Other Parameter;0;0;False;0;False;1.56;1.56;0;4;0;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;1508;-3770.102,188.9923;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1050;-7837.092,-1812.34;Inherit;False;Property;_Smooth6;Smooth 6;35;0;Create;True;0;0;0;False;0;False;0.1;0.2;0;10;0;1;FLOAT;0
-Node;AmplifyShaderEditor.SamplerStateNode;1663;-10367.71,-1385.506;Inherit;False;0;0;0;0;-1;None;1;0;SAMPLER2D;;False;1;SAMPLERSTATE;0
-Node;AmplifyShaderEditor.WorldPosInputsNode;1655;-10208.24,-746.255;Inherit;False;0;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3
 Node;AmplifyShaderEditor.RangedFloatNode;1081;-7848.577,-1008.648;Inherit;False;Property;_OcclusionStrength6;Occlusion Strength 6;32;0;Create;True;0;0;0;False;0;False;0.1;1;-10;10;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1026;-7851.264,-3055.465;Inherit;False;Property;_Shiny2;Shiny 2;10;0;Create;True;0;0;0;False;0;False;0.1;0.1;0;10;0;1;FLOAT;0
-Node;AmplifyShaderEditor.TexturePropertyNode;44;-8716.347,-2675.316;Inherit;True;Property;_Albedo3;Albedo 3;12;3;[Header];[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 3;0;0;False;0;False;None;d4193c885fab53849a003d859b9fd170;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
-Node;AmplifyShaderEditor.RangedFloatNode;1029;-7863.415,-2748.47;Inherit;False;Property;_Shiny5;Shiny 5;28;0;Create;True;0;0;0;False;0;False;0.1;0;0;10;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1410;-8723.886,-1425.598;Inherit;False;Property;_Tiling3;Tiling 3;15;0;Create;True;0;0;0;False;0;False;0.1;0.1;0.01;2;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1077;-7857.441,-1413.036;Inherit;False;Property;_OcclusionStrength2;Occlusion Strength 2;8;0;Create;True;0;0;0;False;0;False;0.1;0.31;-10;10;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1047;-7855.902,-2132.351;Inherit;False;Property;_Smooth3;Smooth 3;17;0;Create;True;0;0;0;False;0;False;0.1;0.82;0;10;0;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;1518;-3300.04,538.4824;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;1516;-3622.412,471.6206;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1030;-7856.753,-2642.291;Inherit;False;Property;_Shiny6;Shiny 6;34;0;Create;True;0;0;0;False;0;False;0.1;0;0;10;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1025;-7858.775,-3148.841;Inherit;False;Property;_Shiny1;Shiny 1;4;0;Create;True;0;0;0;False;0;False;0.1;0;0;10;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1076;-7859.498,-1507.586;Inherit;False;Property;_OcclusionStrength1;Occlusion Strength 1;2;0;Create;True;0;0;0;False;0;False;0.1;2.36;-10;10;0;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;1514;-3935.234,409.5341;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;1425;-3293.843,171.1911;Inherit;False;2;2;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.RangedFloatNode;1413;-8716.694,-1101.737;Inherit;False;Property;_Tiling6;Tiling 6;33;0;Create;True;0;0;0;False;0;False;0.1;0.1;0.01;2;0;1;FLOAT;0
-Node;AmplifyShaderEditor.TexturePropertyNode;43;-8713.832,-2930.658;Inherit;True;Property;_Albedo2;Albedo 2;6;3;[Header];[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 2;0;0;False;0;False;None;c0a45b109fd65b046936482efba94d21;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
-Node;AmplifyShaderEditor.RangedFloatNode;1046;-7851.684,-2230.988;Inherit;False;Property;_Smooth2;Smooth 2;11;0;Create;True;0;0;0;False;0;False;0.1;1.01;0;10;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1412;-8723.891,-1211.491;Inherit;False;Property;_Tiling5;Tiling 5;27;0;Create;True;0;0;0;False;0;False;0.1;0.163;0.01;2;0;1;FLOAT;0
-Node;AmplifyShaderEditor.TexCoordVertexDataNode;114;-10419.11,-530.1771;Inherit;False;1;2;0;5;FLOAT2;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
-Node;AmplifyShaderEditor.TexturePropertyNode;1659;-7160.75,-1820.117;Inherit;True;Property;_Occlusion6;Occlusion 6;31;2;[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 6;0;0;False;0;False;None;f073d69c92cf03d4b837236064595ff3;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
-Node;AmplifyShaderEditor.SimpleAddOpNode;1510;-3292.086,413.2269;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;1513;-3767.286,310.5454;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.TexturePropertyNode;1662;-7161.211,-2037.587;Inherit;True;Property;_Occlusion5;Occlusion 5;25;2;[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 5;0;0;False;0;False;None;904abe3a0a0047448aaf87399172740a;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
-Node;AmplifyShaderEditor.TexturePropertyNode;1661;-7165.925,-2998.126;Inherit;True;Property;_Occlusion1;Occlusion 1;1;2;[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 1;0;0;False;0;False;None;9fd8b2202bbe9c94eb3313c3f871bc03;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
-Node;AmplifyShaderEditor.TexturePropertyNode;1660;-7171.121,-2755.674;Inherit;True;Property;_Occlusion2;Occlusion 2;7;2;[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 2;0;0;False;0;False;None;aacaf9e80a8410a498b89b7012536647;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
-Node;AmplifyShaderEditor.RangedFloatNode;1411;-8709.498,-1315.847;Inherit;False;Property;_Tiling4;Tiling 4;21;0;Create;True;0;0;0;False;0;False;0.1;0.1;0.01;2;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;1028;-7856.949,-2850.91;Inherit;False;Property;_Shiny4;Shiny 4;22;0;Create;True;0;0;0;False;0;False;0.1;0.1;0;10;0;1;FLOAT;0
-Node;AmplifyShaderEditor.TexturePropertyNode;1658;-7167.499,-2506.55;Inherit;True;Property;_Occlusion3;Occlusion 3;13;2;[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 3;0;0;False;0;False;None;c43e618f497cb96429438f86915af477;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
-Node;AmplifyShaderEditor.SimpleAddOpNode;1507;-3930.095,162.7249;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;1505;-3294.902,291.6738;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;1517;-3460.032,500.2755;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;1515;-3775.24,435.8015;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleAddOpNode;1504;-3454.894,253.4668;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SamplerStateNode;1493;-10360.86,-1476.73;Inherit;False;0;0;0;0;-1;None;1;0;SAMPLER2D;;False;1;SAMPLERSTATE;0
-Node;AmplifyShaderEditor.TexturePropertyNode;1657;-7170.558,-2275;Inherit;True;Property;_Occlusion4;Occlusion 4;19;2;[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 4;0;0;False;0;False;None;0db7eaa826100804c98ac7de7aa42dbe;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;6;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthNormals;0;6;DepthNormals;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;2;True;17;d3d9;d3d11;glcore;gles;gles3;metal;vulkan;xbox360;xboxone;xboxseries;ps4;playstation;psp2;n3ds;wiiu;switch;nomrt;0;False;True;1;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;False;-1;True;3;False;-1;False;True;1;LightMode=DepthNormals;False;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;7;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;GBuffer;0;7;GBuffer;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;2;True;17;d3d9;d3d11;glcore;gles;gles3;metal;vulkan;xbox360;xboxone;xboxseries;ps4;playstation;psp2;n3ds;wiiu;switch;nomrt;0;False;True;1;1;False;-1;0;False;-1;1;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;False;False;False;True;1;LightMode=UniversalGBuffer;False;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;5;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Universal2D;0;5;Universal2D;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;2;True;17;d3d9;d3d11;glcore;gles;gles3;metal;vulkan;xbox360;xboxone;xboxseries;ps4;playstation;psp2;n3ds;wiiu;switch;nomrt;0;False;True;1;1;False;-1;0;False;-1;1;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Universal2D;False;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;2;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ShadowCaster;0;2;ShadowCaster;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;2;True;17;d3d9;d3d11;glcore;gles;gles3;metal;vulkan;xbox360;xboxone;xboxseries;ps4;playstation;psp2;n3ds;wiiu;switch;nomrt;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;False;False;True;False;False;False;False;0;False;-1;False;False;False;False;False;False;False;False;False;True;1;False;-1;True;3;False;-1;False;True;1;LightMode=ShadowCaster;False;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;3;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthOnly;0;3;DepthOnly;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;2;True;17;d3d9;d3d11;glcore;gles;gles3;metal;vulkan;xbox360;xboxone;xboxseries;ps4;playstation;psp2;n3ds;wiiu;switch;nomrt;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;False;False;True;False;False;False;False;0;False;-1;False;False;False;False;False;False;False;False;False;True;1;False;-1;False;False;True;1;LightMode=DepthOnly;False;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;4;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Meta;0;4;Meta;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;2;True;17;d3d9;d3d11;glcore;gles;gles3;metal;vulkan;xbox360;xboxone;xboxseries;ps4;playstation;psp2;n3ds;wiiu;switch;nomrt;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Meta;False;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.VertexColorNode;113;-10407.37,-757.0222;Inherit;False;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;1049;-7840.81,-1924.873;Inherit;False;Property;_Smooth5;Smooth 5;29;0;Create;True;0;0;0;False;0;False;0.1;0.22;0;10;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1045;-7848.863,-2334.306;Inherit;False;Property;_Smooth1;Smooth 1;5;0;Create;True;0;0;0;False;0;False;0.1;0;0;10;0;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;1512;-3927.28,284.278;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1078;-7846.423,-1307.39;Inherit;False;Property;_OcclusionStrength3;Occlusion Strength 3;14;0;Create;True;0;0;0;False;0;False;0.1;0.86;-10;10;0;1;FLOAT;0
+Node;AmplifyShaderEditor.TexturePropertyNode;45;-8709.84,-2437.863;Inherit;True;Property;_Albedo4;Albedo 4;18;3;[Header];[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 4;0;0;False;0;False;None;53fd6e83a5f2d1841959744abed92a6b;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
+Node;AmplifyShaderEditor.RangedFloatNode;1408;-8713.096,-1627.113;Inherit;False;Property;_Tiling1;Tiling 1;3;0;Create;True;0;0;0;False;0;False;0.1;0.163;0.01;2;0;1;FLOAT;0
+Node;AmplifyShaderEditor.TexturePropertyNode;47;-8712.674,-1979.778;Inherit;True;Property;_Albedo6;Albedo 6;30;3;[Header];[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 6;0;0;False;0;False;None;97d17f5fbbbb20f43b0b696444e5484b;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
+Node;AmplifyShaderEditor.SimpleAddOpNode;1506;-3617.274,224.8115;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1048;-7844.459,-2019.973;Inherit;False;Property;_Smooth4;Smooth 4;23;0;Create;True;0;0;0;False;0;False;0.1;0.44;0;10;0;1;FLOAT;0
+Node;AmplifyShaderEditor.TexturePropertyNode;42;-8714.773,-3166.896;Inherit;True;Property;_Albedo1;Albedo 1;0;3;[Header];[NoScaleOffset];[SingleLineTexture];Create;True;1;Textures 1;0;0;False;0;False;None;ace22d21483e490428f552c9a83ec097;False;white;LockedToTexture2D;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
+Node;AmplifyShaderEditor.RangedFloatNode;1080;-7844.138,-1109.273;Inherit;False;Property;_OcclusionStrength5;Occlusion Strength 5;26;0;Create;True;0;0;0;False;0;False;0.1;1;-10;10;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1079;-7845.649,-1211.269;Inherit;False;Property;_OcclusionStrength4;Occlusion Strength 4;20;0;Create;True;0;0;0;False;0;False;0.1;0.18;-10;10;0;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;1511;-3614.458,346.3646;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;1409;-8709.494,-1528.154;Inherit;False;Property;_Tiling2;Tiling 2;9;0;Create;True;0;0;0;False;0;False;0.1;0.1;0.01;2;0;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;1422;-3769.042,68.50982;Inherit;False;2;2;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;1;FLOAT3;0
+Node;AmplifyShaderEditor.SamplerStateNode;1663;-10367.71,-1385.506;Inherit;False;0;0;0;0;-1;None;1;0;SAMPLER2D;;False;1;SAMPLERSTATE;0
+Node;AmplifyShaderEditor.RangedFloatNode;1050;-7837.092,-1812.34;Inherit;False;Property;_Smooth6;Smooth 6;35;0;Create;True;0;0;0;False;0;False;0.1;0.2;0;10;0;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;1508;-3770.102,188.9923;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;592;-9893.582,-833.9846;Inherit;False;Property;_Falloff;Fall off;36;1;[Header];Create;True;1;Other Parameter;0;0;False;0;False;1.56;1.56;0;4;0;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleAddOpNode;1421;-3929.035,42.2425;Inherit;False;2;2;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;1;FLOAT3;0
+Node;AmplifyShaderEditor.FunctionNode;1651;-4549.883,-60.28851;Inherit;False;Triplanar-Node-1-Section_Lite_LOD;-1;;7;818219960d7f48bfcbc50911bb0a801f;0;11;194;SAMPLERSTATE;0;False;201;SAMPLERSTATE;0;False;183;FLOAT3;0,0,0;False;184;FLOAT;0;False;1;SAMPLER2D;0;False;200;SAMPLER2D;0;False;2;FLOAT;0.1;False;82;FLOAT;0;False;81;FLOAT;0;False;83;FLOAT;0;False;55;FLOAT;0;False;4;FLOAT3;0;FLOAT;123;FLOAT;121;FLOAT;122
+Node;AmplifyShaderEditor.WorldPosInputsNode;1655;-10208.24,-746.255;Inherit;False;0;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3
+Node;AmplifyShaderEditor.SimpleAddOpNode;1423;-3616.215,104.3289;Inherit;False;2;2;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;1;FLOAT3;0
+Node;AmplifyShaderEditor.RangedFloatNode;1027;-7849.791,-2951.467;Inherit;False;Property;_Shiny3;Shiny 3;16;0;Create;True;0;0;0;False;0;False;0.1;0.1;0;10;0;1;FLOAT;0
+Node;AmplifyShaderEditor.FunctionNode;1649;-5465.188,-68.89624;Inherit;False;Triplanar-Node-1-Section_Lite_LOD;-1;;12;818219960d7f48bfcbc50911bb0a801f;0;11;194;SAMPLERSTATE;0;False;201;SAMPLERSTATE;0;False;183;FLOAT3;0,0,0;False;184;FLOAT;0;False;1;SAMPLER2D;0;False;200;SAMPLER2D;0;False;2;FLOAT;0.1;False;82;FLOAT;0;False;81;FLOAT;0;False;83;FLOAT;0;False;55;FLOAT;0;False;4;FLOAT3;0;FLOAT;123;FLOAT;121;FLOAT;122
+Node;AmplifyShaderEditor.FunctionNode;1650;-5004.451,-57.55017;Inherit;False;Triplanar-Node-1-Section_Lite_LOD;-1;;11;818219960d7f48bfcbc50911bb0a801f;0;11;194;SAMPLERSTATE;0;False;201;SAMPLERSTATE;0;False;183;FLOAT3;0,0,0;False;184;FLOAT;0;False;1;SAMPLER2D;0;False;200;SAMPLER2D;0;False;2;FLOAT;0.1;False;82;FLOAT;0;False;81;FLOAT;0;False;83;FLOAT;0;False;55;FLOAT;0;False;4;FLOAT3;0;FLOAT;123;FLOAT;121;FLOAT;122
+Node;AmplifyShaderEditor.FunctionNode;1652;-5463.137,234.2811;Inherit;False;Triplanar-Node-1-Section_Lite_LOD;-1;;10;818219960d7f48bfcbc50911bb0a801f;0;11;194;SAMPLERSTATE;0;False;201;SAMPLERSTATE;0;False;183;FLOAT3;0,0,0;False;184;FLOAT;0;False;1;SAMPLER2D;0;False;200;SAMPLER2D;0;False;2;FLOAT;0.1;False;82;FLOAT;0;False;81;FLOAT;0;False;83;FLOAT;0;False;55;FLOAT;0;False;4;FLOAT3;0;FLOAT;123;FLOAT;121;FLOAT;122
+Node;AmplifyShaderEditor.FunctionNode;1653;-5002.399,245.6273;Inherit;False;Triplanar-Node-1-Section_Lite_LOD;-1;;9;818219960d7f48bfcbc50911bb0a801f;0;11;194;SAMPLERSTATE;0;False;201;SAMPLERSTATE;0;False;183;FLOAT3;0,0,0;False;184;FLOAT;0;False;1;SAMPLER2D;0;False;200;SAMPLER2D;0;False;2;FLOAT;0.1;False;82;FLOAT;0;False;81;FLOAT;0;False;83;FLOAT;0;False;55;FLOAT;0;False;4;FLOAT3;0;FLOAT;123;FLOAT;121;FLOAT;122
+Node;AmplifyShaderEditor.FunctionNode;1654;-4547.832,242.8889;Inherit;False;Triplanar-Node-1-Section_Lite_LOD;-1;;8;818219960d7f48bfcbc50911bb0a801f;0;11;194;SAMPLERSTATE;0;False;201;SAMPLERSTATE;0;False;183;FLOAT3;0,0,0;False;184;FLOAT;0;False;1;SAMPLER2D;0;False;200;SAMPLER2D;0;False;2;FLOAT;0.1;False;82;FLOAT;0;False;81;FLOAT;0;False;83;FLOAT;0;False;55;FLOAT;0;False;4;FLOAT3;0;FLOAT;123;FLOAT;121;FLOAT;122
+Node;AmplifyShaderEditor.SimpleAddOpNode;1424;-3453.834,132.9841;Inherit;False;2;2;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;1;FLOAT3;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;0;-999.5814,-3904.891;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ExtraPrePass;0;0;ExtraPrePass;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;2;True;17;d3d9;d3d11;glcore;gles;gles3;metal;vulkan;xbox360;xboxone;xboxseries;ps4;playstation;psp2;n3ds;wiiu;switch;nomrt;0;False;True;1;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;0;False;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;4;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Meta;0;4;Meta;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;2;True;17;d3d9;d3d11;glcore;gles;gles3;metal;vulkan;xbox360;xboxone;xboxseries;ps4;playstation;psp2;n3ds;wiiu;switch;nomrt;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Meta;False;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;9;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ScenePickingPass;0;9;ScenePickingPass;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;2;True;17;d3d9;d3d11;glcore;gles;gles3;metal;vulkan;xbox360;xboxone;xboxseries;ps4;playstation;psp2;n3ds;wiiu;switch;nomrt;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Picking;False;True;4;d3d11;glcore;gles;gles3;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;3;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthOnly;0;3;DepthOnly;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;2;True;17;d3d9;d3d11;glcore;gles;gles3;metal;vulkan;xbox360;xboxone;xboxseries;ps4;playstation;psp2;n3ds;wiiu;switch;nomrt;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;False;False;True;False;False;False;False;0;False;-1;False;False;False;False;False;False;False;False;False;True;1;False;-1;False;False;True;1;LightMode=DepthOnly;False;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;8;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;SceneSelectionPass;0;8;SceneSelectionPass;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;2;True;17;d3d9;d3d11;glcore;gles;gles3;metal;vulkan;xbox360;xboxone;xboxseries;ps4;playstation;psp2;n3ds;wiiu;switch;nomrt;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=SceneSelectionPass;False;True;4;d3d11;glcore;gles;gles3;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;5;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Universal2D;0;5;Universal2D;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;2;True;17;d3d9;d3d11;glcore;gles;gles3;metal;vulkan;xbox360;xboxone;xboxseries;ps4;playstation;psp2;n3ds;wiiu;switch;nomrt;0;False;True;1;1;False;-1;0;False;-1;1;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Universal2D;False;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;7;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;GBuffer;0;7;GBuffer;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;2;True;17;d3d9;d3d11;glcore;gles;gles3;metal;vulkan;xbox360;xboxone;xboxseries;ps4;playstation;psp2;n3ds;wiiu;switch;nomrt;0;False;True;1;1;False;-1;0;False;-1;1;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;False;False;False;True;1;LightMode=UniversalGBuffer;False;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;6;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthNormals;0;6;DepthNormals;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;2;True;17;d3d9;d3d11;glcore;gles;gles3;metal;vulkan;xbox360;xboxone;xboxseries;ps4;playstation;psp2;n3ds;wiiu;switch;nomrt;0;False;True;1;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;False;-1;True;3;False;-1;False;True;1;LightMode=DepthNormals;False;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;2;0,0;Float;False;False;-1;2;UnityEditor.ShaderGraphLitGUI;0;1;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ShadowCaster;0;2;ShadowCaster;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;2;True;17;d3d9;d3d11;glcore;gles;gles3;metal;vulkan;xbox360;xboxone;xboxseries;ps4;playstation;psp2;n3ds;wiiu;switch;nomrt;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;False;False;True;False;False;False;False;0;False;-1;False;False;False;False;False;False;False;False;False;True;1;False;-1;True;3;False;-1;False;True;1;LightMode=ShadowCaster;False;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;1;-1532.439,1109.945;Half;False;True;-1;2;UnityEditor.ShaderGraphLitGUI;0;2;uTerrains_Shader_LOD_Lite;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;19;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;2;True;17;d3d9;d3d11;glcore;gles;gles3;metal;vulkan;xbox360;xboxone;xboxseries;ps4;playstation;psp2;n3ds;wiiu;switch;nomrt;0;False;True;1;1;False;-1;0;False;-1;1;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;False;False;False;True;1;LightMode=UniversalForward;False;False;0;Hidden/InternalErrorShader;0;0;Standard;40;Workflow;0;637838400787734890;Surface;0;637838607566779460;  Refraction Model;0;0;  Blend;0;0;Two Sided;1;0;Fragment Normal Space,InvertActionOnDeselection;0;637838340752636060;Transmission;0;0;  Transmission Shadow;0.5,False,-1;0;Translucency;0;0;  Translucency Strength;1,False,-1;0;  Normal Distortion;0.5,False,-1;0;  Scattering;2,False,-1;0;  Direct;0.9,False,-1;0;  Ambient;0.1,False,-1;0;  Shadow;0.5,False,-1;0;Cast Shadows;0;637840382398867730;  Use Shadow Threshold;1;637837049334647640;Receive Shadows;1;0;GPU Instancing;1;0;LOD CrossFade;1;637838598098262670;Built-in Fog;1;0;_FinalColorxAlpha;0;0;Meta Pass;1;0;Override Baked GI;0;0;Extra Pre Pass;0;0;DOTS Instancing;0;0;Tessellation;0;637840367010609900;  Phong;1;637838398215314040;  Strength;1,True,-14;637838611146497990;  Type;1;637836364302939060;  Tess;5,True,-15;637838610927866090;  Min;25,True,-16;637838611006922130;  Max;25,True,-17;637838611072956620;  Edge Length;16,True,396;0;  Max Displacement;25,True,459;0;Write Depth;0;0;  Early Z;0;0;Vertex Position,InvertActionOnDeselection;1;637838337124132950;Debug Display;0;0;Clear Coat;0;0;0;10;False;True;False;True;True;True;True;True;True;True;False;;True;0
-WireConnection;1506;0;1508;0
-WireConnection;1506;1;1652;123
-WireConnection;1512;0;1649;121
-WireConnection;1512;1;1650;121
+WireConnection;1425;0;1424;0
+WireConnection;1425;1;1654;0
+WireConnection;1514;0;1649;122
+WireConnection;1514;1;1650;122
+WireConnection;1518;0;1517;0
+WireConnection;1518;1;1654;122
+WireConnection;1516;0;1515;0
+WireConnection;1516;1;1652;122
+WireConnection;1510;0;1509;0
+WireConnection;1510;1;1654;121
+WireConnection;1504;0;1506;0
+WireConnection;1504;1;1653;123
+WireConnection;1515;0;1514;0
+WireConnection;1515;1;1651;122
+WireConnection;1517;0;1516;0
+WireConnection;1517;1;1653;122
+WireConnection;1505;0;1504;0
+WireConnection;1505;1;1654;123
+WireConnection;1507;0;1649;123
+WireConnection;1507;1;1650;123
+WireConnection;1513;0;1512;0
+WireConnection;1513;1;1651;121
 WireConnection;1509;0;1511;0
 WireConnection;1509;1;1653;121
+WireConnection;1512;0;1649;121
+WireConnection;1512;1;1650;121
+WireConnection;1506;0;1508;0
+WireConnection;1506;1;1652;123
 WireConnection;1511;0;1513;0
 WireConnection;1511;1;1652;121
+WireConnection;1422;0;1421;0
+WireConnection;1422;1;1651;0
+WireConnection;1508;0;1507;0
+WireConnection;1508;1;1651;123
+WireConnection;1421;0;1649;0
+WireConnection;1421;1;1650;0
 WireConnection;1651;194;1493;0
 WireConnection;1651;201;1663;0
 WireConnection;1651;183;1655;0
@@ -3791,50 +3855,8 @@ WireConnection;1651;82;1078;0
 WireConnection;1651;81;1027;0
 WireConnection;1651;83;1047;0
 WireConnection;1651;55;113;3
-WireConnection;1654;194;1493;0
-WireConnection;1654;201;1663;0
-WireConnection;1654;183;1655;0
-WireConnection;1654;184;592;0
-WireConnection;1654;1;47;0
-WireConnection;1654;200;1659;0
-WireConnection;1654;2;1413;0
-WireConnection;1654;82;1081;0
-WireConnection;1654;81;1030;0
-WireConnection;1654;83;1050;0
-WireConnection;1654;55;114;2
-WireConnection;1653;194;1493;0
-WireConnection;1653;201;1663;0
-WireConnection;1653;183;1655;0
-WireConnection;1653;184;592;0
-WireConnection;1653;1;46;0
-WireConnection;1653;200;1662;0
-WireConnection;1653;2;1412;0
-WireConnection;1653;82;1080;0
-WireConnection;1653;81;1029;0
-WireConnection;1653;83;1049;0
-WireConnection;1653;55;114;1
-WireConnection;1652;194;1493;0
-WireConnection;1652;201;1663;0
-WireConnection;1652;183;1655;0
-WireConnection;1652;184;592;0
-WireConnection;1652;1;45;0
-WireConnection;1652;200;1657;0
-WireConnection;1652;2;1411;0
-WireConnection;1652;82;1079;0
-WireConnection;1652;81;1028;0
-WireConnection;1652;83;1048;0
-WireConnection;1652;55;113;4
-WireConnection;1650;194;1493;0
-WireConnection;1650;201;1663;0
-WireConnection;1650;183;1655;0
-WireConnection;1650;184;592;0
-WireConnection;1650;1;43;0
-WireConnection;1650;200;1660;0
-WireConnection;1650;2;1409;0
-WireConnection;1650;82;1077;0
-WireConnection;1650;81;1026;0
-WireConnection;1650;83;1046;0
-WireConnection;1650;55;113;2
+WireConnection;1423;0;1422;0
+WireConnection;1423;1;1652;0
 WireConnection;1649;194;1493;0
 WireConnection;1649;201;1663;0
 WireConnection;1649;183;1655;0
@@ -3846,41 +3868,55 @@ WireConnection;1649;82;1076;0
 WireConnection;1649;81;1025;0
 WireConnection;1649;83;1045;0
 WireConnection;1649;55;113;1
+WireConnection;1650;194;1493;0
+WireConnection;1650;201;1663;0
+WireConnection;1650;183;1655;0
+WireConnection;1650;184;592;0
+WireConnection;1650;1;43;0
+WireConnection;1650;200;1660;0
+WireConnection;1650;2;1409;0
+WireConnection;1650;82;1077;0
+WireConnection;1650;81;1026;0
+WireConnection;1650;83;1046;0
+WireConnection;1650;55;113;2
+WireConnection;1652;194;1493;0
+WireConnection;1652;201;1663;0
+WireConnection;1652;183;1655;0
+WireConnection;1652;184;592;0
+WireConnection;1652;1;45;0
+WireConnection;1652;200;1657;0
+WireConnection;1652;2;1411;0
+WireConnection;1652;82;1079;0
+WireConnection;1652;81;1028;0
+WireConnection;1652;83;1048;0
+WireConnection;1652;55;113;4
+WireConnection;1653;194;1493;0
+WireConnection;1653;201;1663;0
+WireConnection;1653;183;1655;0
+WireConnection;1653;184;592;0
+WireConnection;1653;1;46;0
+WireConnection;1653;200;1662;0
+WireConnection;1653;2;1412;0
+WireConnection;1653;82;1080;0
+WireConnection;1653;81;1029;0
+WireConnection;1653;83;1049;0
+WireConnection;1653;55;114;1
+WireConnection;1654;194;1493;0
+WireConnection;1654;201;1663;0
+WireConnection;1654;183;1655;0
+WireConnection;1654;184;592;0
+WireConnection;1654;1;47;0
+WireConnection;1654;200;1659;0
+WireConnection;1654;2;1413;0
+WireConnection;1654;82;1081;0
+WireConnection;1654;81;1030;0
+WireConnection;1654;83;1050;0
+WireConnection;1654;55;114;2
 WireConnection;1424;0;1423;0
 WireConnection;1424;1;1653;0
-WireConnection;1423;0;1422;0
-WireConnection;1423;1;1652;0
-WireConnection;1422;0;1421;0
-WireConnection;1422;1;1651;0
-WireConnection;1421;0;1649;0
-WireConnection;1421;1;1650;0
-WireConnection;1508;0;1507;0
-WireConnection;1508;1;1651;123
-WireConnection;1518;0;1517;0
-WireConnection;1518;1;1654;122
-WireConnection;1516;0;1515;0
-WireConnection;1516;1;1652;122
-WireConnection;1514;0;1649;122
-WireConnection;1514;1;1650;122
-WireConnection;1425;0;1424;0
-WireConnection;1425;1;1654;0
-WireConnection;1510;0;1509;0
-WireConnection;1510;1;1654;121
-WireConnection;1513;0;1512;0
-WireConnection;1513;1;1651;121
-WireConnection;1507;0;1649;123
-WireConnection;1507;1;1650;123
-WireConnection;1505;0;1504;0
-WireConnection;1505;1;1654;123
-WireConnection;1517;0;1516;0
-WireConnection;1517;1;1653;122
-WireConnection;1515;0;1514;0
-WireConnection;1515;1;1651;122
-WireConnection;1504;0;1506;0
-WireConnection;1504;1;1653;123
 WireConnection;1;0;1425;0
 WireConnection;1;9;1510;0
 WireConnection;1;4;1505;0
 WireConnection;1;5;1518;0
 ASEEND*/
-//CHKSM=464C34B3B940F402968CA272C3B9F1C25BE7E930
+//CHKSM=F15AA717DAC2613AA87F680DDE8CAC9E2103521A

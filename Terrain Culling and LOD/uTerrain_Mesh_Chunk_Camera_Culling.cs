@@ -10,6 +10,7 @@ using UnityEngine.Rendering;
 
 namespace StoneReverieGames.Terrain
 {
+    [BurstCompile]
     public class uTerrain_Mesh_Chunk_Camera_Culling : MonoBehaviour
     {
         public UltimateTerrain _terrain;
@@ -53,6 +54,7 @@ namespace StoneReverieGames.Terrain
         public struct LOD_data
         {
             public Material Original_Material, /* LOD_0_Fade_Material, */ LOD_1_Material, LOD_2_Material;
+            [Range(3, 7)] public int _min_LOD_2_Material_LOD;
         }
 
         protected Dictionary<Material, LOD_data> _lod_materials_dic = new Dictionary<Material, LOD_data>();
@@ -213,10 +215,11 @@ namespace StoneReverieGames.Terrain
                                             var matItem = _lod_materials_dic[mat];
                                             if (workItem._chunk.Level != 1)
                                             {
-                                                if (workItem._chunk.Level == 2 && matItem.LOD_1_Material != null) mat = matItem.LOD_1_Material;
-                                                else if (workItem._chunk.Level != 2 && matItem.LOD_2_Material != null) mat = matItem.LOD_2_Material;
+                                                if (workItem._chunk.Level < matItem._min_LOD_2_Material_LOD && matItem.LOD_1_Material != null) mat = matItem.LOD_1_Material;
+                                                else if (workItem._chunk.Level >= matItem._min_LOD_2_Material_LOD && matItem.LOD_2_Material != null) mat = matItem.LOD_2_Material;
                                             }
                                         }
+
 
                                         Graphics.DrawMesh(workItem._filter.sharedMesh, workItem._transform, mat, _renderingLayerMask, camera, s);
                                     }
@@ -327,8 +330,8 @@ namespace StoneReverieGames.Terrain
                 {
                     _lod_materials_dic.Add(LOD_Materials[m].Original_Material, LOD_Materials[m]);
                 }
-                
-		RenderPipelineManager.beginContextRendering -= beginContextRendering;
+
+                RenderPipelineManager.beginContextRendering -= beginContextRendering;
                 RenderPipelineManager.beginContextRendering += beginContextRendering;
 
                 init = true;
@@ -340,7 +343,7 @@ namespace StoneReverieGames.Terrain
                     _terrain.OnChunkCreated -= OnChunkCreated;
                     _terrain.OnChunkDropped -= OnChunkDropped;
                     _terrain.OnChunkEnabled -= OnChunkEnabled;
-                    
+
                     RenderPipelineManager.beginContextRendering -= beginContextRendering;
                 }
 

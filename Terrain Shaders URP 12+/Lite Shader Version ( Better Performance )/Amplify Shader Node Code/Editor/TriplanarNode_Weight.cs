@@ -1,3 +1,4 @@
+#if AMPLIFY_SHADER_EDITOR
 using UnityEngine;
 using UnityEditor;
 
@@ -81,6 +82,14 @@ namespace AmplifyShaderEditor
         private readonly string m_functionHeader = "inline {0} TriplanarSampling{1}( {2}float3 worldPos, float3 worldNormal, float falloff, float2 tiling, float3 normalScale, float3 index, float weight )";
 
         private readonly List<string> m_functionSamplingBodyProj = new List<string>() {
+            "float4 outputVar = float4(0,0,0,0);",
+            "if ( weight > 0.0 ) {",
+            "float3 projNormal = ( pow( abs( worldNormal ), falloff ) );",
+            "projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;",// 0.00001 is to prevent division by 0
+			"float3 nsign = sign( worldNormal );"
+        };
+        private readonly List<string> m_functionSamplingBodyProjNormal = new List<string>() {
+            "float3 outputVar = float3(0,0,0);",
             "if ( weight > 0.0 ) {",
             "float3 projNormal = ( pow( abs( worldNormal ), falloff ) );",
             "projNormal /= ( projNormal.x + projNormal.y + projNormal.z ) + 0.00001;",// 0.00001 is to prevent division by 0
@@ -113,27 +122,27 @@ namespace AmplifyShaderEditor
         };
 
         private readonly List<string> m_functionSamplingBodyReturnSphereNormalize = new List<string>() {
-            "return normalize( xNorm.xyz * projNormal.x + yNorm.xyz * projNormal.y + zNorm.xyz * projNormal.z );",
+            "outputVar  = normalize( xNorm.xyz * projNormal.x + yNorm.xyz * projNormal.y + zNorm.xyz * projNormal.z );",
             "}",
-            "return float3(0,0,0);"
+            "return outputVar;"
         };
 
         private readonly List<string> m_functionSamplingBodyReturnCylinderNormalize = new List<string>() {
-            "return normalize( xNorm.xyz * projNormal.x + yNorm.xyz * projNormal.y + yNormN.xyz * negProjNormalY + zNorm.xyz * projNormal.z );",
+            "outputVar = normalize( xNorm.xyz * projNormal.x + yNorm.xyz * projNormal.y + yNormN.xyz * negProjNormalY + zNorm.xyz * projNormal.z );",
             "}",
-            "return float3(0,0,0);"
+            "return outputVar;"
         };
 
         private readonly List<string> m_functionSamplingBodyReturnSphere = new List<string>() {
-            "return xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;",
+            "outputVar = xNorm * projNormal.x + yNorm * projNormal.y + zNorm * projNormal.z;",
             "}",
-            "return float4(0,0,0,0);"
+            "return outputVar;"
         };
 
         private readonly List<string> m_functionSamplingBodyReturnCylinder = new List<string>() {
-            "return xNorm * projNormal.x + yNorm * projNormal.y + yNormN * negProjNormalY + zNorm * projNormal.z;",
+            "outputVar = xNorm * projNormal.x + yNorm * projNormal.y + yNormN * negProjNormalY + zNorm * projNormal.z;",
             "}",
-            "return float4(0,0,0,0);"
+            "return outputVar;"
         };
 
         private Rect m_allPicker;
@@ -1182,7 +1191,8 @@ namespace AmplifyShaderEditor
             string extraArguments = string.Empty;
             List<string> triplanarBody = new List<string>();
 
-            triplanarBody.AddRange(m_functionSamplingBodyProj);
+            if (m_normalCorrection == false) triplanarBody.AddRange(m_functionSamplingBodyProj);
+            else triplanarBody.AddRange(m_functionSamplingBodyProjNormal);
             headerID += OutputId;
             if (m_selectedTriplanarType == TriplanarType.Spherical)
             {
@@ -1551,3 +1561,4 @@ namespace AmplifyShaderEditor
         }
     }
 }
+#endif
